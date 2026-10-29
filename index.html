@@ -310,11 +310,11 @@
             perspective: 1200px;
         }
 
-        /* Snappy & Silky Fast Scroll Reveal (0.3s) */
+        /* Masterpiece 3D Scroll Reveal with Holographic Shimmer */
         .scroll-reveal {
             opacity: 0;
-            transform: translateY(18px) scale(0.99);
-            transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateY(38px) scale(0.96);
+            transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s ease, box-shadow 0.35s ease;
             will-change: opacity, transform;
         }
         .scroll-reveal.revealed {
@@ -323,10 +323,10 @@
         }
 
         /* Fast Micro Stagger Delays */
-        .delay-1 { transition-delay: 0.03s; }
-        .delay-2 { transition-delay: 0.06s; }
-        .delay-3 { transition-delay: 0.09s; }
-        .delay-4 { transition-delay: 0.12s; }
+        .delay-1 { transition-delay: 0.08s; }
+        .delay-2 { transition-delay: 0.16s; }
+        .delay-3 { transition-delay: 0.24s; }
+        .delay-4 { transition-delay: 0.32s; }
 
         /* KPI Grid Layout */
         .kpi-grid {
@@ -583,6 +583,12 @@
                 <span id="themeName">الذهب السيادي</span>
             </button>
 
+            <!-- Replay Animations Button -->
+            <button class="btn-action" onclick="replayAllAnimations()" title="إعادة تشغيل الحركات والتأثيرات البيانية">
+                <span>💫</span>
+                <span>تشغيل الحركات</span>
+            </button>
+
             <!-- Instant PDF Boardroom Brief -->
             <a href="sovereign_executive_boardroom_briefing_2026.pdf" download="sovereign_executive_boardroom_briefing_2026.pdf" class="btn-action btn-pdf" title="تحميل تقرير مجلس الإدارة المعتمد بصيغة PDF">
                 <span>📄</span>
@@ -601,7 +607,7 @@
     <main style="max-width: 1280px; margin: 0 auto; padding: 24px 18px; position: relative; z-index: 10;">
 
         <!-- Executive Portfolio Banner with Inflation Delta Guard -->
-        <div class="glass-card hud-bracket scroll-reveal interactive-tilt revealed" style="padding: 28px; border-right: 4.5px solid var(--fin-gold); margin-bottom: 28px;">
+        <div class="glass-card hud-bracket scroll-reveal interactive-tilt" id="bannerExecutive" style="padding: 28px; border-right: 4.5px solid var(--fin-gold); margin-bottom: 28px;">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
                 <div>
                     <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
@@ -615,7 +621,7 @@
                         </div>
                     </div>
                     <h2 style="font-size: 1.85rem; font-weight: 900; margin-top: 6px;">
-                        إجمالي الأصول المدارة: <span style="color: var(--fin-gold); font-family: 'JetBrains Mono';">185.40</span> مليون جنيه مصري
+                        إجمالي الأصول المدارة: <span style="color: var(--fin-gold); font-family: 'JetBrains Mono';" id="bannerAumNumber">185.40</span> مليون جنيه مصري
                     </h2>
                     <p style="font-size: 0.9rem; color: var(--text-dim); margin-top: 6px; max-width: 760px; line-height: 1.6;">
                         العائد السنوي الموزون للمحفظة <strong style="color: #10B981; font-family: 'JetBrains Mono';">+24.8%</strong> مع تركيز سيادي في أذون الخزانة المصرية (27.25% عائد خالي من المخاطر) ومحفظة سبائك الذهب الفعلي المتحوط للتضخم. القوة الشرائية محصنة بالكامل.
@@ -631,8 +637,8 @@
         </div>
 
         <!-- Key Financial Telemetry Cards -->
-        <div class="kpi-grid">
-            <div class="glass-card kpi-item hud-bracket scroll-reveal interactive-tilt delay-1 revealed" style="border-right: 3.5px solid #FFD700;">
+        <div class="kpi-grid" id="kpiGridContainer">
+            <div class="glass-card kpi-item hud-bracket scroll-reveal interactive-tilt delay-1" style="border-right: 3.5px solid #FFD700;">
                 <div class="kpi-title">
                     <span>أذون الخزانة المصرية (T-Bills 1Y)</span>
                     <span>🏛️</span>
@@ -644,7 +650,7 @@
                 </div>
             </div>
 
-            <div class="glass-card kpi-item hud-bracket scroll-reveal interactive-tilt delay-2 revealed" style="border-right: 3.5px solid #F59E0B;">
+            <div class="glass-card kpi-item hud-bracket scroll-reveal interactive-tilt delay-2" style="border-right: 3.5px solid #F59E0B;">
                 <div class="kpi-title">
                     <span>سبائك الذهب الفعلي (24K Bullion)</span>
                     <span>🪙</span>
@@ -656,7 +662,7 @@
                 </div>
             </div>
 
-            <div class="glass-card kpi-item hud-bracket scroll-reveal interactive-tilt delay-3 revealed" style="border-right: 3.5px solid #00F0FF;">
+            <div class="glass-card kpi-item hud-bracket scroll-reveal interactive-tilt delay-3" style="border-right: 3.5px solid #00F0FF;">
                 <div class="kpi-title">
                     <span>أسهم البورصة القيادية (EGX30)</span>
                     <span>📈</span>
@@ -668,7 +674,7 @@
                 </div>
             </div>
 
-            <div class="glass-card kpi-item hud-bracket scroll-reveal interactive-tilt delay-4 revealed" style="border-right: 3.5px solid #10B981;">
+            <div class="glass-card kpi-item hud-bracket scroll-reveal interactive-tilt delay-4" style="border-right: 3.5px solid #10B981;">
                 <div class="kpi-title">
                     <span>أصول عقارية وصكوك إيجارية</span>
                     <span>🏢</span>
@@ -683,7 +689,7 @@
 
         <!-- Charts Row 1: Capital Growth Horizon with High-Legibility Labels & Asset Allocation Donut -->
         <div class="charts-row-2">
-            <div class="glass-card chart-box hud-bracket scroll-reveal interactive-tilt delay-1 revealed">
+            <div class="glass-card chart-box hud-bracket scroll-reveal interactive-tilt delay-1" id="boxGrowth">
                 <div class="chart-head">
                     <h3><span>📈</span> توقعات تراكم نمو رأس المال لـ 5 سنوات ومقارنة التضخم</h3>
                     <span class="hud-badge">Plotly Spline + CPI Guard</span>
@@ -691,7 +697,7 @@
                 <div id="plotGrowth" class="plot-container" style="width: 100%; height: 380px;"></div>
             </div>
 
-            <div class="glass-card chart-box hud-bracket scroll-reveal interactive-tilt delay-2 revealed">
+            <div class="glass-card chart-box hud-bracket scroll-reveal interactive-tilt delay-2" id="boxDonut">
                 <div class="chart-head">
                     <h3><span>🪙</span> توزيع الأصول الرأسمالية ونسب المحفظة</h3>
                     <span class="hud-badge">Plotly 3D Donut</span>
@@ -702,7 +708,7 @@
 
         <!-- Charts Row 2: Yield Curve Ladder & Risk-Return Scatter Matrix -->
         <div class="charts-row-2">
-            <div class="glass-card chart-box hud-bracket scroll-reveal interactive-tilt delay-1 revealed">
+            <div class="glass-card chart-box hud-bracket scroll-reveal interactive-tilt delay-1" id="boxYield">
                 <div class="chart-head">
                     <h3><span>🏛️</span> منحنى عوائد أذون الخزانة المصرية حسب فترات الاستحقاق</h3>
                     <span class="hud-badge">T-Bills Curve</span>
@@ -710,7 +716,7 @@
                 <div id="plotYieldLadder" class="plot-container" style="width: 100%; height: 380px;"></div>
             </div>
 
-            <div class="glass-card chart-box hud-bracket scroll-reveal interactive-tilt delay-2 revealed">
+            <div class="glass-card chart-box hud-bracket scroll-reveal interactive-tilt delay-2" id="boxRisk">
                 <div class="chart-head">
                     <h3><span>⚖️</span> مصفوفة العائد المحقق مقابل معامل المخاطرة والتذبذب</h3>
                     <span class="hud-badge">Alpha vs Risk</span>
@@ -720,7 +726,7 @@
         </div>
 
         <!-- What-If Asset Rebalancing Simulator -->
-        <div class="glass-card hud-bracket scroll-reveal interactive-tilt revealed" id="rebalanceSimulator" style="padding: 28px; margin-bottom: 28px; border-left: 4px solid var(--fin-cyan);">
+        <div class="glass-card hud-bracket scroll-reveal interactive-tilt" id="rebalanceSimulator" style="padding: 28px; margin-bottom: 28px; border-left: 4px solid var(--fin-cyan);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
                 <h3 style="font-size: 1.25rem; font-weight: 900; display: flex; align-items: center; gap: 10px;">
                     <span>🎛️</span>
@@ -924,42 +930,229 @@
             });
         }
 
-        // Fast & Energetic CountUp Telemetry (600ms)
-        function countUp(el, target, decimals = 1, prefix = '', suffix = '') {
-            let start = 0;
-            const duration = 600;
-            const stepTime = 16;
-            const totalSteps = duration / stepTime;
-            const inc = (target - start) / totalSteps;
-
-            const timer = setInterval(() => {
-                start += inc;
-                if (start >= target) {
-                    start = target;
-                    clearInterval(timer);
-                }
-                el.innerHTML = `${prefix}${start.toFixed(decimals)} <span style="font-size: 0.95rem; color: var(--text-dim);">${suffix}</span>`;
-            }, stepTime);
+        // Universal High-Precision Smooth Easing (easeOutCubic)
+        function easeOutCubic(t) {
+            return 1 - Math.pow(1 - t, 3);
         }
 
-        // Snappy Scroll Reveal & Telemetry Initialization
+        // Animated Numerical Counter (requestAnimationFrame, 60 FPS)
+        function animateCounter(el, target, decimals = 1, prefix = '', suffix = '', duration = 1200) {
+            if (!el) return;
+            const startTime = performance.now();
+            function step(now) {
+                const elapsed = now - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const val = (target * easeOutCubic(progress)).toFixed(decimals);
+                el.innerHTML = `${prefix}${val} <span style="font-size: 0.95rem; color: var(--text-dim);">${suffix}</span>`;
+                if (progress < 1) requestAnimationFrame(step);
+            }
+            requestAnimationFrame(step);
+        }
+
+        // Chart 1: T-Bills Yield Ladder Rising Bars Animation
+        let yieldAnimRunning = false;
+        function animateYieldBars() {
+            if (yieldAnimRunning) return;
+            yieldAnimRunning = true;
+            const targetY = [28.50, 27.90, 27.45, 27.25];
+            const baseMin = 20.0;
+            const startTime = performance.now();
+            const duration = 1300;
+
+            function frame(now) {
+                const elapsed = now - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const ease = easeOutCubic(progress);
+
+                const currentY = targetY.map(t => Number((baseMin + (t - baseMin) * ease).toFixed(2)));
+                const currentText = currentY.map(y => y.toFixed(2) + '%');
+
+                Plotly.restyle('plotYieldLadder', { y: [currentY], text: [currentText] }, [0]);
+
+                if (progress < 1) {
+                    requestAnimationFrame(frame);
+                } else {
+                    Plotly.restyle('plotYieldLadder', { 
+                        y: [targetY], 
+                        text: [['28.50%', '27.90%', '27.45%', '27.25%']] 
+                    }, [0]);
+                    yieldAnimRunning = false;
+                }
+            }
+            requestAnimationFrame(frame);
+        }
+
+        // Chart 2: 5-Year Horizon Spline Growth Animation
+        let growthAnimRunning = false;
+        function animateGrowthSplines() {
+            if (growthAnimRunning) return;
+            growthAnimRunning = true;
+
+            const targets = [
+                [75.0, 95.4, 121.4, 154.5, 196.6],
+                [42.5, 58.9, 81.6, 113.1, 156.8],
+                [38.2, 49.4, 63.9, 82.7, 107.0],
+                [75.0, 93.3, 116.0, 144.3, 179.6]
+            ];
+
+            const startTime = performance.now();
+            const duration = 1400;
+
+            function frame(now) {
+                const elapsed = now - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const ease = easeOutCubic(progress);
+
+                const currentY = targets.map(curve => {
+                    const startVal = curve[0];
+                    return curve.map(v => Number((startVal + (v - startVal) * ease).toFixed(1)));
+                });
+
+                Plotly.restyle('plotGrowth', { y: currentY }, [0, 1, 2, 3]);
+
+                if (progress < 1) {
+                    requestAnimationFrame(frame);
+                } else {
+                    Plotly.restyle('plotGrowth', { y: targets }, [0, 1, 2, 3]);
+                    growthAnimRunning = false;
+                }
+            }
+            requestAnimationFrame(frame);
+        }
+
+        // Chart 3: Asset Allocation 3D Donut Bloom Animation
+        let donutAnimRunning = false;
+        function animateDonut() {
+            if (donutAnimRunning) return;
+            donutAnimRunning = true;
+            const targetVals = [75.0, 42.5, 38.2, 29.7];
+            const startTime = performance.now();
+            const duration = 1200;
+
+            function frame(now) {
+                const elapsed = now - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const ease = easeOutCubic(progress);
+
+                const currentVals = targetVals.map(v => Math.max(0.05, Number((v * ease).toFixed(1))));
+
+                Plotly.restyle('plotDonut', { values: [currentVals] }, [0]);
+
+                if (progress < 1) {
+                    requestAnimationFrame(frame);
+                } else {
+                    Plotly.restyle('plotDonut', { values: [targetVals] }, [0]);
+                    donutAnimRunning = false;
+                }
+            }
+            requestAnimationFrame(frame);
+        }
+
+        // Chart 4: Risk-Return Scatter Matrix Bubble Launch Animation
+        let riskAnimRunning = false;
+        function animateRiskMatrix() {
+            if (riskAnimRunning) return;
+            riskAnimRunning = true;
+
+            const isMobile = window.innerWidth <= 768;
+            const targetY = [27.25, 38.60, 29.40, 14.80];
+            const targetSizes = isMobile ? [28, 38, 34, 28] : [32, 40, 36, 30];
+            const startTime = performance.now();
+            const duration = 1300;
+
+            function frame(now) {
+                const elapsed = now - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const ease = easeOutCubic(progress);
+
+                const currentY = targetY.map(y => Number((10.0 + (y - 10.0) * ease).toFixed(2)));
+                const currentSizes = targetSizes.map(s => Number((2.0 + (s - 2.0) * ease).toFixed(1)));
+
+                Plotly.restyle('plotRiskMatrix', { 
+                    y: [currentY],
+                    'marker.size': [currentSizes]
+                }, [0]);
+
+                if (progress < 1) {
+                    requestAnimationFrame(frame);
+                } else {
+                    Plotly.restyle('plotRiskMatrix', { 
+                        y: [targetY],
+                        'marker.size': [targetSizes]
+                    }, [0]);
+                    riskAnimRunning = false;
+                }
+            }
+            requestAnimationFrame(frame);
+        }
+
+        // Master Replay Animations Button Action
+        function replayAllAnimations() {
+            playChime(1320, 0.12);
+            confetti({
+                particleCount: 50,
+                spread: 80,
+                origin: { y: 0.25 },
+                colors: ['#FFD700', '#F59E0B', '#10B981', '#00F0FF']
+            });
+
+            // Re-run counters
+            animateCounter(document.getElementById('bannerAumNumber'), 185.40, 2, '', '', 1200);
+            animateCounter(document.getElementById('kpi-tbills'), 75.0, 1, '', 'مليون ج.م', 1200);
+            animateCounter(document.getElementById('kpi-gold'), 42.5, 1, '', 'مليون ج.م', 1300);
+            animateCounter(document.getElementById('kpi-equity'), 38.2, 1, '', 'مليون ج.م', 1400);
+            animateCounter(document.getElementById('kpi-realestate'), 29.7, 1, '', 'مليون ج.م', 1500);
+
+            // Re-run all chart animations
+            setTimeout(animateGrowthSplines, 100);
+            setTimeout(animateDonut, 200);
+            setTimeout(animateYieldBars, 300);
+            setTimeout(animateRiskMatrix, 400);
+        }
+
+        // Snappy Scroll Reveal & Dynamic Interactive Observer
         function initObserver() {
             const obs = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        entry.target.classList.add('revealed');
+                        const el = entry.target;
+                        el.classList.add('revealed');
 
-                        // Telemetry triggers
-                        if (entry.target.querySelector('#kpi-tbills')) {
-                            countUp(document.getElementById('kpi-tbills'), 75.0, 1, '', 'مليون ج.م');
-                            countUp(document.getElementById('kpi-gold'), 42.5, 1, '', 'مليون ج.م');
-                            countUp(document.getElementById('kpi-equity'), 38.2, 1, '', 'مليون ج.م');
-                            countUp(document.getElementById('kpi-realestate'), 29.7, 1, '', 'مليون ج.م');
+                        // Trigger KPI counters when KPI grid or banner appears
+                        if (el.id === 'bannerExecutive' && !el.dataset.animated) {
+                            el.dataset.animated = 'true';
+                            animateCounter(document.getElementById('bannerAumNumber'), 185.40, 2, '', '', 1200);
                         }
-                        obs.unobserve(entry.target);
+                        if (el.id === 'kpiGridContainer' && !el.dataset.animated) {
+                            el.dataset.animated = 'true';
+                            animateCounter(document.getElementById('kpi-tbills'), 75.0, 1, '', 'مليون ج.م', 1200);
+                            animateCounter(document.getElementById('kpi-gold'), 42.5, 1, '', 'مليون ج.م', 1300);
+                            animateCounter(document.getElementById('kpi-equity'), 38.2, 1, '', 'مليون ج.م', 1400);
+                            animateCounter(document.getElementById('kpi-realestate'), 29.7, 1, '', 'مليون ج.م', 1500);
+                        }
+
+                        // Trigger dynamic chart animations on scroll
+                        if (el.id === 'boxGrowth' && !el.dataset.animated) {
+                            el.dataset.animated = 'true';
+                            setTimeout(animateGrowthSplines, 180);
+                        }
+                        if (el.id === 'boxDonut' && !el.dataset.animated) {
+                            el.dataset.animated = 'true';
+                            setTimeout(animateDonut, 180);
+                        }
+                        if (el.id === 'boxYield' && !el.dataset.animated) {
+                            el.dataset.animated = 'true';
+                            setTimeout(animateYieldBars, 180);
+                        }
+                        if (el.id === 'boxRisk' && !el.dataset.animated) {
+                            el.dataset.animated = 'true';
+                            setTimeout(animateRiskMatrix, 180);
+                        }
+
+                        obs.unobserve(el);
                     }
                 });
-            }, { threshold: 0.05, rootMargin: '40px' });
+            }, { threshold: 0.12, rootMargin: '0px 0px -20px 0px' });
 
             document.querySelectorAll('.scroll-reveal').forEach(el => obs.observe(el));
         }
@@ -975,7 +1168,7 @@
             });
         }
 
-        // Render Plotly Visualizations (Ultra-Crisp Legible Labels, Fixed Range, Zero Clipping)
+        // Render Plotly Visualizations (Initial Baseline for Dynamic Scroll Transitions)
         function renderPlots() {
             const isMobile = window.innerWidth <= 768;
             const chartConfig = {
@@ -988,11 +1181,11 @@
                 staticPlot: false
             };
 
-            // 1. Capital Growth Spline with High-Contrast Legible Labels
+            // 1. Capital Growth Spline (Initializes with 2026 base values, animates dynamically)
             Plotly.newPlot('plotGrowth', [
                 {
                     x: ['2026', '2027', '2028', '2029', '2030'],
-                    y: [75.0, 95.4, 121.4, 154.5, 196.6],
+                    y: [75.0, 75.0, 75.0, 75.0, 75.0],
                     name: 'أذون الخزانة (27.25%)',
                     line: { color: '#FFD700', width: 3.8, shape: 'spline' },
                     mode: 'lines+markers',
@@ -1000,7 +1193,7 @@
                 },
                 {
                     x: ['2026', '2027', '2028', '2029', '2030'],
-                    y: [42.5, 58.9, 81.6, 113.1, 156.8],
+                    y: [42.5, 42.5, 42.5, 42.5, 42.5],
                     name: 'سبائك الذهب (38.6%)',
                     line: { color: '#F59E0B', width: 3.8, dash: 'dot', shape: 'spline' },
                     mode: 'lines+markers',
@@ -1008,7 +1201,7 @@
                 },
                 {
                     x: ['2026', '2027', '2028', '2029', '2030'],
-                    y: [38.2, 49.4, 63.9, 82.7, 107.0],
+                    y: [38.2, 38.2, 38.2, 38.2, 38.2],
                     name: 'أسهم EGX30 (29.4%)',
                     line: { color: '#00F0FF', width: 3.8, shape: 'spline' },
                     mode: 'lines+markers',
@@ -1016,7 +1209,7 @@
                 },
                 {
                     x: ['2026', '2027', '2028', '2029', '2030'],
-                    y: [75.0, 93.3, 116.0, 144.3, 179.6],
+                    y: [75.0, 75.0, 75.0, 75.0, 75.0],
                     name: 'التضخم (24.4% CBE)',
                     line: { color: '#EF4444', width: 2.5, dash: 'dash' },
                     mode: 'lines',
@@ -1047,13 +1240,14 @@
                     gridcolor: 'rgba(255,255,255,0.08)', 
                     fixedrange: true,
                     automargin: true,
+                    range: [30, 210],
                     tickfont: { color: '#CBD5E1', size: 12, family: 'Cairo', weight: 700 }
                 }
             }, chartConfig);
 
-            // 2. Asset Allocation 3D Donut (Large Visible Labels & Clear Slices)
+            // 2. Asset Allocation 3D Donut (Initializes with compact wedges, blooms dynamically)
             Plotly.newPlot('plotDonut', [{
-                values: [75.0, 42.5, 38.2, 29.7],
+                values: [0.05, 0.05, 0.05, 0.05],
                 labels: ['أذون خزانة حكومية', 'سبائك ذهب عيار 24', 'أسهم قيادية EGX30', 'أصول عقارية وصكوك'],
                 type: 'pie',
                 hole: 0.58,
@@ -1082,16 +1276,16 @@
                 margin: { l: 20, r: 20, t: 20, b: isMobile ? 65 : 50, automargin: true }
             }, chartConfig);
 
-            // 3. T-Bills Yield Ladder (High-Contrast Bold Outside Percentages & Clean Two-Line Labels)
+            // 3. T-Bills Yield Ladder (Initializes at 20.0% base, columns physically climb up on scroll!)
             Plotly.newPlot('plotYieldLadder', [{
                 x: ['3 شهور<br>(91 يوم)', '6 شهور<br>(182 يوم)', '9 شهور<br>(273 يوم)', 'سنة كاملة<br>(364 يوم)'],
-                y: [28.50, 27.90, 27.45, 27.25],
+                y: [20.0, 20.0, 20.0, 20.0],
                 type: 'bar',
                 marker: {
                     color: ['#00F0FF', '#10B981', '#A855F7', '#FFD700'],
                     line: { color: '#FFFFFF', width: 1.5 }
                 },
-                text: ['28.50%', '27.90%', '27.45%', '27.25%'],
+                text: ['20.00%', '20.00%', '20.00%', '20.00%'],
                 textposition: 'outside',
                 textfont: { color: '#FFD700', size: isMobile ? 13 : 14.5, family: 'Cairo', weight: 900 }
             }], {
@@ -1117,16 +1311,16 @@
                 }
             }, chartConfig);
 
-            // 4. Risk vs Return Scatter (Crisp Labels & Clear Padding)
+            // 4. Risk vs Return Scatter (Initializes at base, bubbles pop up and scale on scroll!)
             Plotly.newPlot('plotRiskMatrix', [{
                 x: [2.5, 8.5, 18.2, 11.0],
-                y: [27.25, 38.60, 29.40, 14.80],
+                y: [10.0, 10.0, 10.0, 10.0],
                 mode: 'markers+text',
                 text: ['أذون الخزانة', 'سبائك الذهب', 'البورصة EGX30', 'العقارات المدرة'],
                 textposition: 'top center',
                 textfont: { color: '#FFFFFF', size: isMobile ? 12 : 13.5, family: 'Cairo', weight: 800 },
                 marker: {
-                    size: isMobile ? [28, 38, 34, 28] : [32, 42, 38, 30],
+                    size: [2, 2, 2, 2],
                     color: ['#FFD700', '#F59E0B', '#00F0FF', '#10B981'],
                     line: { color: '#FFFFFF', width: 2.2 }
                 }
@@ -1198,6 +1392,7 @@
         window.addEventListener('DOMContentLoaded', () => {
             initHoloParticles();
             initTilt();
+            renderPlots();
             initObserver();
             window.addEventListener('scroll', handleScroll, { passive: true });
             window.addEventListener('resize', () => {
@@ -1207,9 +1402,27 @@
                 });
             }, { passive: true });
             document.body.addEventListener('click', initAudio, { once: true });
-            renderPlots();
             recalculatePortfolio();
             setInterval(lockPlotlyDragLayer, 1000);
+
+            // Auto-trigger top initial elements smoothly
+            setTimeout(() => {
+                const banner = document.getElementById('bannerExecutive');
+                if (banner && !banner.dataset.animated) {
+                    banner.classList.add('revealed');
+                    banner.dataset.animated = 'true';
+                    animateCounter(document.getElementById('bannerAumNumber'), 185.40, 2, '', '', 1200);
+                }
+                const kpis = document.getElementById('kpiGridContainer');
+                if (kpis && !kpis.dataset.animated) {
+                    kpis.querySelectorAll('.kpi-item').forEach(item => item.classList.add('revealed'));
+                    kpis.dataset.animated = 'true';
+                    animateCounter(document.getElementById('kpi-tbills'), 75.0, 1, '', 'مليون ج.م', 1200);
+                    animateCounter(document.getElementById('kpi-gold'), 42.5, 1, '', 'مليون ج.م', 1300);
+                    animateCounter(document.getElementById('kpi-equity'), 38.2, 1, '', 'مليون ج.م', 1400);
+                    animateCounter(document.getElementById('kpi-realestate'), 29.7, 1, '', 'مليون ج.م', 1500);
+                }
+            }, 300);
         });
     </script>
 </body>
