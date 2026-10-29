@@ -120,6 +120,146 @@
             color: #B45309;
         }
 
+        /* 100% High-Contrast Text Overrides for Light Mode */
+        body.theme-light h1,
+        body.theme-light h2,
+        body.theme-light h3,
+        body.theme-light h4 {
+            color: #0F172A !important;
+        }
+
+        body.theme-light p {
+            color: #334155 !important;
+        }
+
+        body.theme-light .chart-head h3 {
+            color: #0F172A !important;
+        }
+
+        body.theme-light .kpi-title {
+            color: #475569 !important;
+        }
+
+        body.theme-light .kpi-number {
+            color: #0F172A !important;
+        }
+
+        body.theme-light #kpi-tbills {
+            color: #B45309 !important;
+        }
+
+        body.theme-light #kpi-gold {
+            color: #D97706 !important;
+        }
+
+        body.theme-light #kpi-equity {
+            color: #0284C7 !important;
+        }
+
+        body.theme-light #kpi-realestate {
+            color: #059669 !important;
+        }
+
+        body.theme-light #bannerAumNumber {
+            color: #B45309 !important;
+        }
+
+        body.theme-light .kpi-footer span {
+            color: #475569 !important;
+        }
+
+        body.theme-light .inflation-badge {
+            background: rgba(220, 38, 38, 0.08) !important;
+            border-color: rgba(220, 38, 38, 0.3) !important;
+            color: #DC2626 !important;
+        }
+
+        body.theme-light .slider-box .slider-label-row span {
+            color: #0F172A !important;
+        }
+
+        body.theme-light #lblTbills {
+            color: #B45309 !important;
+        }
+
+        body.theme-light #lblGold {
+            color: #D97706 !important;
+        }
+
+        body.theme-light #lblEquity {
+            color: #0284C7 !important;
+        }
+
+        body.theme-light #lblRealEstateRemaining {
+            color: #059669 !important;
+        }
+
+        body.theme-light #resAnnual {
+            color: #B45309 !important;
+        }
+
+        body.theme-light #resMonthly {
+            color: #0284C7 !important;
+        }
+
+        body.theme-light #resYield {
+            color: #059669 !important;
+            text-shadow: none !important;
+        }
+
+        body.theme-light input[type="range"] {
+            background: rgba(15, 23, 42, 0.15) !important;
+        }
+
+        body.theme-light .laser-waveform-header {
+            color: #0284C7 !important;
+        }
+
+        body.theme-light .laser-waveform-title {
+            color: #B45309 !important;
+        }
+
+        body.theme-light .laser-waveform-freq {
+            color: #64748B !important;
+        }
+
+        body.theme-light .laser-path-bg {
+            stroke: rgba(15, 23, 42, 0.15) !important;
+        }
+
+        /* Plotly SVG Text & Labels High-Contrast Overrides for Light Mode */
+        body.theme-light .plot-container text {
+            fill: #0F172A !important;
+        }
+        body.theme-light #plotRiskMatrix text.textpoint {
+            fill: #0F172A !important;
+            font-weight: 800 !important;
+        }
+        body.theme-light #plotYieldLadder text.bartext {
+            fill: #B45309 !important;
+            font-weight: 900 !important;
+        }
+        body.theme-light .plot-container .legendtext {
+            fill: #0F172A !important;
+            font-weight: 700 !important;
+        }
+        body.theme-light .plot-container .xtick text,
+        body.theme-light .plot-container .ytick text {
+            fill: #0F172A !important;
+            font-weight: 700 !important;
+        }
+        body.theme-light .plot-container .g-xtitle text,
+        body.theme-light .plot-container .g-ytitle text {
+            fill: #1E293B !important;
+            font-weight: 800 !important;
+        }
+        body.theme-light .plot-container .gridlayer path {
+            stroke: rgba(15, 23, 42, 0.12) !important;
+        }
+        body.theme-light .plot-container .zerolinelayer path {
+            stroke: rgba(15, 23, 42, 0.2) !important;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -1115,14 +1255,18 @@
         function updatePlotsTheme(mode) {
             const isLight = mode === 'light';
             const fontColor = isLight ? '#0F172A' : '#F8FAFC';
-            const gridColor = isLight ? 'rgba(15, 23, 42, 0.08)' : 'rgba(255, 255, 255, 0.08)';
+            const titleColor = isLight ? '#1E293B' : '#94A3B8';
+            const gridColor = isLight ? 'rgba(15, 23, 42, 0.12)' : 'rgba(255, 255, 255, 0.08)';
 
             const layoutUpdate = {
                 'font.color': fontColor,
                 'paper_bgcolor': 'rgba(0,0,0,0)',
                 'plot_bgcolor': 'rgba(0,0,0,0)',
+                'legend.font.color': fontColor,
                 'xaxis.tickfont.color': fontColor,
                 'yaxis.tickfont.color': fontColor,
+                'xaxis.title.font.color': titleColor,
+                'yaxis.title.font.color': titleColor,
                 'yaxis.gridcolor': gridColor
             };
 
@@ -1132,9 +1276,35 @@
                     try { Plotly.relayout(el, layoutUpdate); } catch(e) {}
                 }
             });
+
+            // Trace-specific textfont colors for complete 100% legibility
+            const riskEl = document.getElementById('plotRiskMatrix');
+            if (riskEl && riskEl.data) {
+                try {
+                    Plotly.restyle(riskEl, { 
+                        'textfont.color': isLight ? '#0F172A' : '#FFFFFF',
+                        'textfont.size': 13.5
+                    }, [0]);
+                } catch(e) {}
+            }
+
+            const yieldEl = document.getElementById('plotYieldLadder');
+            if (yieldEl && yieldEl.data) {
+                try {
+                    Plotly.restyle(yieldEl, { 
+                        'textfont.color': isLight ? '#B45309' : '#FFD700' 
+                    }, [0]);
+                } catch(e) {}
+            }
+
             const donutEl = document.getElementById('plotDonut');
             if (donutEl && donutEl.data) {
-                try { Plotly.relayout(donutEl, { 'font.color': fontColor }); } catch(e) {}
+                try { 
+                    Plotly.relayout(donutEl, { 
+                        'font.color': fontColor,
+                        'legend.font.color': fontColor 
+                    }); 
+                } catch(e) {}
             }
         }
 
@@ -1743,6 +1913,15 @@
             initTilt();
             renderPlots();
             initObserver();
+
+            // Check saved theme and restore high contrast
+            try {
+                const savedTheme = localStorage.getItem('sovereign_theme_mode');
+                if (savedTheme === 'light') {
+                    toggleDarkLightTheme();
+                }
+            } catch(e) {}
+
             window.addEventListener('scroll', () => {
                 handleScroll();
                 checkVisibleCharts();
