@@ -20,6 +20,7 @@
             --fin-emerald: #10B981;
             --fin-cyan: #00F0FF;
             --fin-purple: #A855F7;
+            --fin-danger: #EF4444;
             --bg-deep: #030712;
             --bg-card: rgba(15, 23, 42, 0.72);
             --bg-card-hover: rgba(30, 41, 59, 0.88);
@@ -27,6 +28,28 @@
             --glass-border-focus: rgba(0, 240, 255, 0.55);
             --text-main: #F8FAFC;
             --text-dim: #94A3B8;
+            --theme-glow: rgba(255, 215, 0, 0.25);
+            --laser-grad: linear-gradient(90deg, #FFD700, #10B981, #00F0FF, #FFD700);
+        }
+
+        /* Emerald Sovereign Theme */
+        body.theme-emerald {
+            --fin-gold: #10B981;
+            --fin-amber: #059669;
+            --glass-border: rgba(16, 185, 129, 0.28);
+            --glass-border-focus: rgba(16, 185, 129, 0.65);
+            --theme-glow: rgba(16, 185, 129, 0.35);
+            --laser-grad: linear-gradient(90deg, #10B981, #00F0FF, #34D399, #10B981);
+        }
+
+        /* Royal Titanium Theme */
+        body.theme-titanium {
+            --fin-gold: #00F0FF;
+            --fin-amber: #A855F7;
+            --glass-border: rgba(0, 240, 255, 0.28);
+            --glass-border-focus: rgba(168, 85, 247, 0.65);
+            --theme-glow: rgba(0, 240, 255, 0.35);
+            --laser-grad: linear-gradient(90deg, #00F0FF, #A855F7, #EC4899, #00F0FF);
         }
 
         * {
@@ -40,7 +63,7 @@
         body {
             background-color: var(--bg-deep);
             background-image: 
-                radial-gradient(circle at 10% 15%, rgba(255, 215, 0, 0.09) 0%, transparent 45%),
+                radial-gradient(circle at 10% 15%, rgba(255, 215, 0, 0.08) 0%, transparent 45%),
                 radial-gradient(circle at 85% 80%, rgba(0, 240, 255, 0.08) 0%, transparent 45%),
                 radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.05) 0%, transparent 60%),
                 linear-gradient(180deg, #030712 0%, #070D1E 50%, #020617 100%);
@@ -48,6 +71,7 @@
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
+            transition: background-color 0.4s ease, color 0.4s ease;
         }
 
         /* 100% Locked Non-Zoomable Charts & Native Mobile Touch Scroll */
@@ -79,11 +103,11 @@
             left: 0;
             height: 3.5px;
             width: 0%;
-            background: linear-gradient(90deg, #FFD700, #10B981, #00F0FF, #FFD700);
+            background: var(--laser-grad);
             background-size: 200% 100%;
-            box-shadow: 0 0 16px rgba(255, 215, 0, 0.8), 0 0 25px rgba(0, 240, 255, 0.6);
+            box-shadow: 0 0 16px var(--theme-glow);
             z-index: 10000;
-            transition: width 0.1s ease-out;
+            transition: width 0.15s cubic-bezier(0.25, 0.8, 0.25, 1);
             animation: laserShimmer 3s linear infinite;
         }
         @keyframes laserShimmer {
@@ -102,12 +126,12 @@
             z-index: 1;
         }
 
-        /* Floating Depth HUD Capsule */
-        #hudDepthCapsule {
+        /* Minimalist Status Capsule / Back to Top (NO "عمق المتصفح") */
+        #hudCapsule {
             position: fixed;
             bottom: 24px;
             left: 24px;
-            background: rgba(15, 23, 42, 0.85);
+            background: rgba(15, 23, 42, 0.88);
             backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
             border-radius: 30px;
@@ -118,16 +142,16 @@
             font-size: 0.78rem;
             font-family: 'JetBrains Mono', monospace;
             color: var(--fin-gold);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7), 0 0 15px rgba(255, 215, 0, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.75), 0 0 15px var(--theme-glow);
             z-index: 999;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        #hudDepthCapsule:hover {
+        #hudCapsule:hover {
             transform: translateY(-3px) scale(1.03);
             border-color: var(--fin-cyan);
             color: var(--fin-cyan);
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.8), 0 0 25px rgba(0, 240, 255, 0.4);
+            box-shadow: 0 14px 40px rgba(0, 0, 0, 0.85), 0 0 25px rgba(0, 240, 255, 0.4);
         }
         .radar-dot {
             width: 8px;
@@ -147,9 +171,9 @@
         .hud-topbar {
             position: sticky;
             top: 0;
-            background: rgba(3, 7, 18, 0.82);
+            background: rgba(3, 7, 18, 0.85);
             backdrop-filter: blur(24px);
-            border-bottom: 1px solid rgba(255, 215, 0, 0.18);
+            border-bottom: 1px solid var(--glass-border);
             z-index: 900;
             padding: 14px 28px;
             display: flex;
@@ -157,11 +181,12 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 12px;
+            transition: border-color 0.4s ease;
         }
 
         .hud-badge {
             background: rgba(255, 215, 0, 0.12);
-            border: 1px solid rgba(255, 215, 0, 0.35);
+            border: 1px solid var(--glass-border);
             color: var(--fin-gold);
             padding: 3px 10px;
             border-radius: 8px;
@@ -169,13 +194,21 @@
             font-family: 'JetBrains Mono', monospace;
             font-weight: 700;
             letter-spacing: 0.5px;
+            transition: all 0.3s ease;
         }
 
-        .btn-audio, .btn-briefing {
+        .action-group {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.15);
             color: var(--text-main);
-            padding: 7px 16px;
+            padding: 7px 15px;
             border-radius: 12px;
             cursor: pointer;
             font-size: 0.78rem;
@@ -183,26 +216,58 @@
             display: inline-flex;
             align-items: center;
             gap: 7px;
-            transition: all 0.25s ease;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .btn-audio:hover {
+        .btn-action:hover {
             border-color: var(--fin-cyan);
             color: var(--fin-cyan);
-            box-shadow: 0 0 12px rgba(0, 240, 255, 0.3);
+            box-shadow: 0 0 14px rgba(0, 240, 255, 0.3);
+            transform: translateY(-2px);
         }
 
-        /* Sovereign Presentation Button */
+        .btn-pdf {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(245, 158, 11, 0.15));
+            border: 1px solid rgba(239, 68, 68, 0.45);
+            color: #FCA5A5;
+        }
+        .btn-pdf:hover {
+            background: linear-gradient(135deg, #EF4444, #F59E0B);
+            color: #FFFFFF;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+        }
+
         .btn-briefing {
             background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(16, 185, 129, 0.15));
-            border: 1px solid rgba(255, 215, 0, 0.45);
+            border: 1px solid var(--glass-border);
             color: var(--fin-gold);
-            box-shadow: 0 0 12px rgba(255, 215, 0, 0.2);
+            box-shadow: 0 0 12px var(--theme-glow);
         }
         .btn-briefing:hover, .btn-briefing.active {
-            background: linear-gradient(135deg, #FFD700, #F59E0B);
+            background: linear-gradient(135deg, var(--fin-gold), var(--fin-amber));
             color: #030712;
-            box-shadow: 0 0 22px rgba(255, 215, 0, 0.6);
-            transform: translateY(-1px);
+            box-shadow: 0 0 22px var(--theme-glow);
+            transform: translateY(-2px);
+        }
+
+        /* Palette Switcher Button */
+        .btn-theme {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--glass-border);
+            color: var(--fin-gold);
+            padding: 7px 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 0.78rem;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+        }
+        .btn-theme:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.03);
         }
 
         /* Executive Briefing Floating Banner */
@@ -220,7 +285,7 @@
             display: flex;
             align-items: center;
             gap: 16px;
-            box-shadow: 0 10px 35px rgba(0,0,0,0.85), 0 0 25px rgba(255, 215, 0, 0.4);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.9), 0 0 25px var(--theme-glow);
             transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             color: #F8FAFC;
             font-size: 0.85rem;
@@ -246,9 +311,9 @@
 
         /* Briefing Mode Body Rules */
         body.executive-briefing-mode #rebalanceSimulator,
-        body.executive-briefing-mode #hudDepthCapsule,
+        body.executive-briefing-mode #hudCapsule,
         body.executive-briefing-mode .kpi-footer,
-        body.executive-briefing-mode .btn-audio {
+        body.executive-briefing-mode .btn-action {
             display: none !important;
         }
         body.executive-briefing-mode .briefing-watermark {
@@ -257,8 +322,8 @@
         body.executive-briefing-mode .chart-box {
             padding: 26px;
             background: rgba(10, 16, 32, 0.95);
-            border: 1.5px solid rgba(255, 215, 0, 0.45);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.92), 0 0 30px rgba(255, 215, 0, 0.2);
+            border: 1.5px solid var(--glass-border);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.92), 0 0 30px var(--theme-glow);
         }
         body.executive-briefing-mode .chart-box div[id^="plot"] {
             height: 380px !important;
@@ -270,7 +335,7 @@
             margin-bottom: 24px;
             padding: 14px;
             background: rgba(255, 215, 0, 0.08);
-            border: 1.5px dashed rgba(255, 215, 0, 0.4);
+            border: 1.5px dashed var(--glass-border);
             border-radius: 14px;
             color: var(--fin-gold);
             font-size: 0.9rem;
@@ -286,12 +351,14 @@
             border-radius: 20px;
             box-shadow: 0 12px 35px rgba(0, 0, 0, 0.65);
             position: relative;
-            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease, box-shadow 0.4s ease;
             overflow: hidden;
+            will-change: transform, box-shadow;
+            transform: translateZ(0);
         }
         .glass-card:hover {
             border-color: var(--glass-border-focus);
-            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 240, 255, 0.2);
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.8), 0 0 20px var(--theme-glow);
         }
 
         /* 4-Corner HUD Tech Brackets */
@@ -302,7 +369,7 @@
             height: 12px;
             border-color: var(--fin-gold);
             pointer-events: none;
-            transition: all 0.3s ease;
+            transition: all 0.35s ease;
         }
         .hud-bracket::before {
             top: 6px;
@@ -325,14 +392,14 @@
         /* 3D Perspective Tilt Container */
         .interactive-tilt {
             transform-style: preserve-3d;
-            perspective: 1000px;
+            perspective: 1200px;
         }
 
         /* Scroll Reveal Transitions */
         .scroll-reveal {
             opacity: 0;
-            transform: translateY(35px) scale(0.97);
-            transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateY(35px) scale(0.98);
+            transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .scroll-reveal.revealed {
             opacity: 1;
@@ -381,6 +448,20 @@
             margin-top: 4px;
         }
 
+        /* Inflation Delta Badge */
+        .inflation-badge {
+            background: rgba(239, 68, 68, 0.12);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            color: #F87171;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
         /* Charts 2-Column Row */
         .charts-row-2 {
             display: grid;
@@ -409,107 +490,6 @@
             gap: 8px;
         }
 
-        /* Fullscreen Focus Button on Chart Header */
-        .btn-chart-focus {
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            color: #E2E8F0;
-            padding: 4px 11px;
-            border-radius: 8px;
-            font-size: 0.72rem;
-            font-weight: 700;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            transition: all 0.2s ease;
-        }
-        .btn-chart-focus:hover {
-            background: rgba(0, 240, 255, 0.15);
-            border-color: var(--fin-cyan);
-            color: var(--fin-cyan);
-            box-shadow: 0 0 10px rgba(0, 240, 255, 0.35);
-        }
-
-        /* Fullscreen Focus Modal */
-        .chart-modal-overlay {
-            position: fixed;
-            inset: 0;
-            z-index: 99999;
-            background: rgba(2, 6, 23, 0.94);
-            backdrop-filter: blur(28px);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 16px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        .chart-modal-overlay.active {
-            display: flex;
-            opacity: 1;
-        }
-        .chart-modal-card {
-            width: 100%;
-            max-width: 1100px;
-            max-height: 94vh;
-            background: rgba(15, 23, 42, 0.96);
-            border: 1.5px solid var(--fin-gold);
-            border-radius: 22px;
-            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.95), 0 0 40px rgba(255, 215, 0, 0.25);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            animation: modalPop 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        @keyframes modalPop {
-            0% { transform: scale(0.92); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        .chart-modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 18px 24px;
-            border-bottom: 1px solid rgba(255, 215, 0, 0.2);
-            background: rgba(0, 0, 0, 0.35);
-        }
-        .chart-modal-body {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-        .modal-telemetry-box {
-            background: rgba(255, 215, 0, 0.05);
-            border: 1px solid rgba(255, 215, 0, 0.2);
-            border-radius: 14px;
-            padding: 14px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
-            font-size: 0.85rem;
-        }
-        .btn-modal-close {
-            background: rgba(239, 68, 68, 0.15);
-            border: 1px solid rgba(239, 68, 68, 0.4);
-            color: #F87171;
-            padding: 6px 14px;
-            border-radius: 10px;
-            font-size: 0.8rem;
-            font-weight: 800;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        .btn-modal-close:hover {
-            background: #EF4444;
-            color: white;
-        }
-
         /* Simulator Slider Section */
         .sim-grid {
             display: grid;
@@ -536,11 +516,12 @@
             outline: none;
             accent-color: var(--fin-gold);
             cursor: pointer;
+            transition: background 0.3s ease;
         }
         .sim-result-box {
             background: rgba(255, 215, 0, 0.06);
             border-radius: 18px;
-            border: 1px solid rgba(255,215,0,0.38);
+            border: 1px solid var(--glass-border);
             text-align: center;
             box-shadow: inset 0 0 25px rgba(255,215,0,0.08);
             padding: 22px;
@@ -556,12 +537,13 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.45);
-            transition: all 0.2s ease;
+            box-shadow: 0 0 20px var(--theme-glow);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .btn-simulate:hover {
             filter: brightness(1.15);
             transform: scale(1.02);
+            box-shadow: 0 0 30px var(--theme-glow);
         }
 
         @media (max-width: 768px) {
@@ -578,10 +560,10 @@
     <!-- Ambient 3D Cyber Particles Canvas -->
     <canvas id="holoCanvas"></canvas>
 
-    <!-- Floating Depth HUD Capsule -->
-    <div id="hudDepthCapsule" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="انقر للصعود للأعلى بنعومة">
+    <!-- Minimalist Status Capsule / Back to Top (No "عمق المتصفح") -->
+    <div id="hudCapsule" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="انقر للصعود لأعلى الصفحة">
         <div class="radar-dot"></div>
-        <span id="hudDepthText">عمق التصفح: 0% • نظرة المحفظة السيادية</span>
+        <span id="hudStatusText">المحفظة السيادية • بث لحظي 2026</span>
         <span style="font-size: 0.8rem; opacity: 0.8;">▲</span>
     </div>
 
@@ -591,24 +573,10 @@
         <button class="briefing-exit-btn" onclick="toggleExecutiveBriefing()">✕ الخروج [ESC]</button>
     </div>
 
-    <!-- Fullscreen Focus Chart Modal Overlay -->
-    <div id="chartFullscreenModal" class="chart-modal-overlay">
-        <div class="chart-modal-card">
-            <div class="chart-modal-header">
-                <h2 id="modalChartTitle" style="font-size: 1.1rem; font-weight: 800; display: flex; align-items: center; gap: 10px;"></h2>
-                <button class="btn-modal-close" onclick="closeChartFullscreen()">✕ إغلاق [ESC]</button>
-            </div>
-            <div class="chart-modal-body">
-                <div id="modalChartContent" style="width: 100%; height: 58vh;"></div>
-                <div id="modalChartTelemetry" class="modal-telemetry-box"></div>
-            </div>
-        </div>
-    </div>
-
     <!-- HUD Header -->
     <header class="hud-topbar">
         <div style="display: flex; align-items: center; gap: 14px;">
-            <div style="width: 44px; height: 44px; border-radius: 14px; background: linear-gradient(135deg, #FFD700, #F59E0B); display: flex; align-items: center; justify-content: center; font-size: 1.35rem; box-shadow: 0 0 16px rgba(255,215,0,0.4);">
+            <div style="width: 44px; height: 44px; border-radius: 14px; background: linear-gradient(135deg, var(--fin-gold), var(--fin-amber)); display: flex; align-items: center; justify-content: center; font-size: 1.35rem; box-shadow: 0 0 16px var(--theme-glow); transition: all 0.4s ease;">
                 🏛️
             </div>
             <div>
@@ -622,18 +590,30 @@
             </div>
         </div>
 
-        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-            <button class="btn-briefing" id="briefingToggleBtn" onclick="toggleExecutiveBriefing()" title="وضع الاجتماعات الرسمية لكبار المستثمرين">
+        <div class="action-group">
+            <!-- Palette Theme Switcher -->
+            <button class="btn-theme" onclick="cycleTheme()" title="تغيير ثيم الهولوجرام (ذهبي / زمردي / تيتانيوم)">
+                <span id="themeIcon">👑</span>
+                <span id="themeName">الذهب السيادي</span>
+            </button>
+
+            <!-- Instant PDF Boardroom Brief -->
+            <a href="sovereign_executive_boardroom_briefing_2026.pdf" download="sovereign_executive_boardroom_briefing_2026.pdf" class="btn-action btn-pdf" title="تحميل تقرير مجلس الإدارة المعتمد بصيغة PDF">
+                <span>📄</span>
+                <span>تقرير A4 التنفيذي</span>
+            </a>
+
+            <!-- Executive Briefing Mode -->
+            <button class="btn-action btn-briefing" id="briefingToggleBtn" onclick="toggleExecutiveBriefing()" title="وضع الاجتماعات الرسمية لكبار المستثمرين">
                 <span>💼</span>
-                <span id="briefingLabel">وضع الاجتماعات الرسمية</span>
+                <span>وضع الاجتماعات</span>
             </button>
-            <button class="btn-audio" id="audioToggleBtn" onclick="toggleSound()">
+
+            <!-- Sound feedback -->
+            <button class="btn-action" id="audioToggleBtn" onclick="toggleSound()">
                 <span id="audioIcon">🔊</span>
-                <span id="audioLabel">Glass Sonic: ON</span>
+                <span id="audioLabel">Glass Sonic</span>
             </button>
-            <span class="hud-badge" style="background: rgba(16, 185, 129, 0.12); color: #10B981; border-color: rgba(16, 185, 129, 0.4);">
-                ● بث الأصول اللحظي
-            </span>
         </div>
     </header>
 
@@ -642,27 +622,34 @@
 
         <!-- Executive Briefing Watermark -->
         <div class="briefing-watermark">
-            🏛️ العرض السيادي المعتمد • اجتماع مجلس الإدارة ولجنة الاستثمار العليا 2026 • سري وتفيذي
+            🏛️ العرض السيادي المعتمد • اجتماع مجلس الإدارة ولجنة الاستثمار العليا 2026 • سري وتنفيذي
         </div>
 
-        <!-- Executive Portfolio Banner -->
+        <!-- Executive Portfolio Banner with Inflation Delta Guard -->
         <div class="glass-card hud-bracket scroll-reveal interactive-tilt" style="padding: 28px; border-right: 4.5px solid var(--fin-gold); margin-bottom: 28px;">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
                 <div>
-                    <span style="font-size: 0.78rem; color: var(--fin-gold); font-family: 'JetBrains Mono'; font-weight: 800; text-transform: uppercase;">
-                        🏛️ محفظة الأصول المعتمدة لسنة 2026
-                    </span>
-                    <h2 style="font-size: 1.85rem; font-weight: 900; margin-top: 4px;">
+                    <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                        <span style="font-size: 0.78rem; color: var(--fin-gold); font-family: 'JetBrains Mono'; font-weight: 800; text-transform: uppercase;">
+                            🏛️ محفظة الأصول المعتمدة لسنة 2026
+                        </span>
+                        <!-- Inflation Delta Guard Badge -->
+                        <div class="inflation-badge">
+                            <span>🛡️ درع التضخم (Inflation Delta Guard):</span>
+                            <strong>+14.2% ألفا أعلى من التضخم (CBE: 24.4%)</strong>
+                        </div>
+                    </div>
+                    <h2 style="font-size: 1.85rem; font-weight: 900; margin-top: 6px;">
                         إجمالي الأصول المدارة: <span style="color: var(--fin-gold); font-family: 'JetBrains Mono';">185.40</span> مليون جنيه مصري
                     </h2>
-                    <p style="font-size: 0.88rem; color: var(--text-dim); margin-top: 6px; max-width: 700px;">
-                        العائد السنوي الموزون للمحفظة <strong style="color: #10B981; font-family: 'JetBrains Mono';">+24.8%</strong> مع تركيز سيادي في أذون الخزانة المصرية (27.25% عائد خالي من المخاطر) ومحفظة سبائك الذهب الفعلي المتحوط للتضخم.
+                    <p style="font-size: 0.88rem; color: var(--text-dim); margin-top: 6px; max-width: 760px;">
+                        العائد السنوي الموزون للمحفظة <strong style="color: #10B981; font-family: 'JetBrains Mono';">+24.8%</strong> مع تركيز سيادي في أذون الخزانة المصرية (27.25% خالي من المخاطر) ومحفظة سبائك الذهب الفعلي المتحوط للتضخم. القوة الشرائية مضمونة بالكامل ضد تذبذبات الصرف.
                     </p>
                 </div>
                 <div style="display: flex; gap: 12px; align-items: center;">
-                    <div style="text-align: right; border-right: 2px solid rgba(255,215,0,0.3); padding-right: 14px;">
-                        <span style="font-size: 0.72rem; color: var(--text-dim);">التوزيع الاستراتيجي</span>
-                        <div style="font-size: 1.1rem; font-weight: 900; color: #10B981; font-family: 'JetBrains Mono';">محفظة متوازنة</div>
+                    <div style="text-align: right; border-right: 2px solid var(--glass-border); padding-right: 14px;">
+                        <span style="font-size: 0.72rem; color: var(--text-dim);">الحماية التضخمية</span>
+                        <div style="font-size: 1.1rem; font-weight: 900; color: #10B981; font-family: 'JetBrains Mono';">محفظة محصنة 100%</div>
                     </div>
                 </div>
             </div>
@@ -719,32 +706,22 @@
             </div>
         </div>
 
-        <!-- Charts Row 1: Capital Growth Horizon & Asset Allocation Donut -->
+        <!-- Charts Row 1: Capital Growth Horizon with Inflation Benchmark & Asset Allocation Donut -->
         <div class="charts-row-2">
             <div class="glass-card chart-box hud-bracket scroll-reveal interactive-tilt delay-1">
                 <div class="chart-head">
-                    <h3><span>📈</span> توقعات تراكم نمو رأس المال لـ 5 سنوات (2026–2030)</h3>
-                    <div style="display: flex; gap: 8px; align-items: center;">
-                        <button class="btn-chart-focus" onclick="openChartFullscreen('plotGrowth')" title="ملء الشاشة لفحص التفاصيل">
-                            ⛶ ملء الشاشة
-                        </button>
-                        <span class="hud-badge">Plotly Spline</span>
-                    </div>
+                    <h3><span>📈</span> توقعات تراكم نمو رأس المال لـ 5 سنوات ومقارنة التضخم</h3>
+                    <span class="hud-badge">Plotly Spline + CPI Guard</span>
                 </div>
-                <div id="plotGrowth" style="width: 100%; height: 310px;"></div>
+                <div id="plotGrowth" style="width: 100%; height: 320px;"></div>
             </div>
 
             <div class="glass-card chart-box hud-bracket scroll-reveal interactive-tilt delay-2">
                 <div class="chart-head">
                     <h3><span>🪙</span> توزيع الأصول الرأسمالية ونسب المحفظة</h3>
-                    <div style="display: flex; gap: 8px; align-items: center;">
-                        <button class="btn-chart-focus" onclick="openChartFullscreen('plotDonut')" title="ملء الشاشة لفحص التفاصيل">
-                            ⛶ ملء الشاشة
-                        </button>
-                        <span class="hud-badge">Plotly 3D Donut</span>
-                    </div>
+                    <span class="hud-badge">Plotly 3D Donut</span>
                 </div>
-                <div id="plotDonut" style="width: 100%; height: 310px;"></div>
+                <div id="plotDonut" style="width: 100%; height: 320px;"></div>
             </div>
         </div>
 
@@ -753,27 +730,17 @@
             <div class="glass-card chart-box hud-bracket scroll-reveal interactive-tilt delay-1">
                 <div class="chart-head">
                     <h3><span>🏛️</span> منحنى عوائد أذون الخزانة المصرية حسب فترات الاستحقاق</h3>
-                    <div style="display: flex; gap: 8px; align-items: center;">
-                        <button class="btn-chart-focus" onclick="openChartFullscreen('plotYieldLadder')" title="ملء الشاشة لفحص التفاصيل">
-                            ⛶ ملء الشاشة
-                        </button>
-                        <span class="hud-badge">T-Bills Curve</span>
-                    </div>
+                    <span class="hud-badge">T-Bills Curve</span>
                 </div>
-                <div id="plotYieldLadder" style="width: 100%; height: 310px;"></div>
+                <div id="plotYieldLadder" style="width: 100%; height: 320px;"></div>
             </div>
 
             <div class="glass-card chart-box hud-bracket scroll-reveal interactive-tilt delay-2">
                 <div class="chart-head">
                     <h3><span>⚖️</span> مصفوفة العائد المحقق مقابل معامل المخاطرة والتذبذب</h3>
-                    <div style="display: flex; gap: 8px; align-items: center;">
-                        <button class="btn-chart-focus" onclick="openChartFullscreen('plotRiskMatrix')" title="ملء الشاشة لفحص التفاصيل">
-                            ⛶ ملء الشاشة
-                        </button>
-                        <span class="hud-badge">Alpha vs Risk</span>
-                    </div>
+                    <span class="hud-badge">Alpha vs Risk</span>
                 </div>
-                <div id="plotRiskMatrix" style="width: 100%; height: 310px;"></div>
+                <div id="plotRiskMatrix" style="width: 100%; height: 320px;"></div>
             </div>
         </div>
 
@@ -843,7 +810,7 @@
         <!-- Institutional Footer -->
         <footer style="text-align: center; padding: 24px 0 10px 0; color: var(--text-dim); font-size: 0.78rem;">
             <p>منصة إدارة الأصول السيادية والتكنولوجيا المالية • إصدار المؤسسات 2026</p>
-            <p style="margin-top: 4px; font-family: 'JetBrains Mono';">تم التطوير بواسطة المهندس <strong>محمود حافظ</strong> (@mth1346686)</p>
+            <p style="margin-top: 4px; font-family: 'JetBrains Mono';">تم التطوير والاعتماد بواسطة المهندس <strong>محمود حافظ</strong> (@mth1346686)</p>
         </footer>
     </main>
 
@@ -884,12 +851,29 @@
             const label = document.getElementById('audioLabel');
             if (isAudioEnabled) {
                 icon.innerText = '🔊';
-                label.innerText = 'Glass Sonic: ON';
+                label.innerText = 'Glass Sonic';
                 playChime(987, 0.1);
             } else {
                 icon.innerText = '🔇';
-                label.innerText = 'Glass Sonic: OFF';
+                label.innerText = 'Muted';
             }
+        }
+
+        // Palette Switcher (3 Luxury Themes: Cyber Gold, Emerald, Titanium)
+        const themes = [
+            { id: 'gold', name: 'الذهب السيادي', icon: '👑', className: '' },
+            { id: 'emerald', name: 'الزمرد الاستثماري', icon: '💎', className: 'theme-emerald' },
+            { id: 'titanium', name: 'التيتانيوم الملكي', icon: '⚡', className: 'theme-titanium' }
+        ];
+        let currentThemeIndex = 0;
+
+        function cycleTheme() {
+            currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+            const t = themes[currentThemeIndex];
+            document.body.className = t.className;
+            document.getElementById('themeIcon').innerText = t.icon;
+            document.getElementById('themeName').innerText = t.name;
+            playChime(1175, 0.1);
         }
 
         // Executive Briefing Mode Controller
@@ -919,136 +903,14 @@
             }, 300);
         }
 
-        // Fullscreen Focus Chart Specs & Controller
-        const chartSpecs = {
-            'plotGrowth': {
-                title: 'توقعات تراكم نمو رأس المال لـ 5 سنوات (2026–2030)',
-                type: 'Plotly Spline',
-                insights: 'أذون الخزانة تنمو من 75.0M إلى 196.6M ج.م • سبائك الذهب تحقق قفزة استثنائية إلى 156.8M ج.م • أسهم البورصة تتضاعف إلى 107.0M ج.م.',
-                data: () => [
-                    { x: ['2026', '2027', '2028', '2029', '2030'], y: [75.0, 95.4, 121.4, 154.5, 196.6], name: 'أذون الخزانة (27.25%)', line: { color: '#FFD700', width: 4, shape: 'spline' }, mode: 'lines+markers', marker: { size: 10, color: '#FFD700' } },
-                    { x: ['2026', '2027', '2028', '2029', '2030'], y: [42.5, 58.9, 81.6, 113.1, 156.8], name: 'سبائك الذهب (38.6%)', line: { color: '#F59E0B', width: 4, dash: 'dot', shape: 'spline' }, mode: 'lines+markers', marker: { size: 10, color: '#F59E0B' } },
-                    { x: ['2026', '2027', '2028', '2029', '2030'], y: [38.2, 49.4, 63.9, 82.7, 107.0], name: 'أسهم EGX30 (29.4%)', line: { color: '#00F0FF', width: 4, shape: 'spline' }, mode: 'lines+markers', marker: { size: 10, color: '#00F0FF' } }
-                ],
-                layout: {
-                    paper_bgcolor: 'rgba(0,0,0,0)',
-                    plot_bgcolor: 'rgba(0,0,0,0)',
-                    font: { color: '#F8FAFC', family: 'Cairo', size: 13 },
-                    margin: { l: 40, r: 30, t: 30, b: 40 },
-                    legend: { orientation: 'h', y: 1.15, x: 0.5, xanchor: 'center' },
-                    dragmode: false,
-                    xaxis: { showgrid: false, fixedrange: true },
-                    yaxis: { showgrid: true, gridcolor: 'rgba(255,255,255,0.08)', fixedrange: true }
-                }
-            },
-            'plotDonut': {
-                title: 'توزيع الأصول الرأسمالية ونسب المحفظة السيادية',
-                type: 'Plotly 3D Donut',
-                insights: 'التركيز الأساسي: 40.5% أذون خزانة • 22.9% سبائك ذهب عيار 24 • 20.6% بورصة مصرية • 16.0% أصول عقارية وصكوك.',
-                data: () => [{
-                    values: [75.0, 42.5, 38.2, 29.7],
-                    labels: ['أذون خزانة حكومية', 'سبائك ذهب عيار 24', 'أسهم قيادية EGX30', 'أصول عقارية وصكوك'],
-                    type: 'pie', hole: 0.55,
-                    marker: { colors: ['#FFD700', '#F59E0B', '#00F0FF', '#10B981'], line: { color: '#030712', width: 3 } },
-                    textinfo: 'percent+label', hoverinfo: 'label+value+percent'
-                }],
-                layout: {
-                    paper_bgcolor: 'rgba(0,0,0,0)',
-                    plot_bgcolor: 'rgba(0,0,0,0)',
-                    font: { color: '#F8FAFC', family: 'Cairo', size: 14 },
-                    showlegend: true,
-                    legend: { orientation: 'h', y: -0.1 },
-                    dragmode: false,
-                    margin: { l: 20, r: 20, t: 20, b: 40 }
-                }
-            },
-            'plotYieldLadder': {
-                title: 'منحنى عوائد أذون الخزانة المصرية حسب فترات الاستحقاق',
-                type: 'T-Bills Curve',
-                insights: 'أعلى عائد تاريخي: 28.50% لآجال 3 شهور • 27.90% لـ 6 شهور • 27.45% لـ 9 شهور • 27.25% لسنة كاملة مضمونة بالكامل.',
-                data: () => [{
-                    x: ['3 شهور (91 يوم)', '6 شهور (182 يوم)', '9 شهور (273 يوم)', 'سنة كاملة (364 يوم)'],
-                    y: [28.50, 27.90, 27.45, 27.25],
-                    type: 'bar',
-                    marker: { color: ['#00F0FF', '#10B981', '#A855F7', '#FFD700'], line: { color: '#FFFFFF', width: 1.5 } },
-                    text: ['28.50%', '27.90%', '27.45%', '27.25%'], textposition: 'outside'
-                }],
-                layout: {
-                    paper_bgcolor: 'rgba(0,0,0,0)',
-                    plot_bgcolor: 'rgba(0,0,0,0)',
-                    font: { color: '#F8FAFC', family: 'Cairo', size: 13 },
-                    margin: { l: 40, r: 30, t: 30, b: 50 },
-                    dragmode: false,
-                    xaxis: { showgrid: false, fixedrange: true },
-                    yaxis: { showgrid: true, gridcolor: 'rgba(255,255,255,0.08)', range: [20, 31], fixedrange: true }
-                }
-            },
-            'plotRiskMatrix': {
-                title: 'مصفوفة العائد المحقق مقابل معامل المخاطرة والتذبذب',
-                type: 'Alpha vs Risk',
-                insights: 'الذهب يحقق أعلى عائد سنوي 38.6% بمخاطرة مدروسة 8.5% • أذون الخزانة صفرية المخاطرة الائتمانية 2.5% مع عائد 27.25%.',
-                data: () => [{
-                    x: [2.5, 8.5, 18.2, 11.0], y: [27.25, 38.60, 29.40, 14.80],
-                    mode: 'markers+text',
-                    text: ['أذون الخزانة', 'سبائك الذهب', 'البورصة EGX30', 'العقارات المدرة'],
-                    textposition: 'top center',
-                    marker: { size: [36, 46, 40, 32], color: ['#FFD700', '#F59E0B', '#00F0FF', '#10B981'], line: { color: '#FFFFFF', width: 2.5 } }
-                }],
-                layout: {
-                    paper_bgcolor: 'rgba(0,0,0,0)',
-                    plot_bgcolor: 'rgba(0,0,0,0)',
-                    font: { color: '#F8FAFC', family: 'Cairo', size: 13 },
-                    margin: { l: 45, r: 30, t: 40, b: 45 },
-                    dragmode: false,
-                    xaxis: { title: 'مؤشر التذبذب والمخاطرة (%)', showgrid: true, gridcolor: 'rgba(255,255,255,0.08)', fixedrange: true },
-                    yaxis: { title: 'العائد السنوي الصافي (%)', showgrid: true, gridcolor: 'rgba(255,255,255,0.08)', fixedrange: true }
-                }
-            }
-        };
-
-        function openChartFullscreen(chartId) {
-            const spec = chartSpecs[chartId];
-            if (!spec) return;
-            const modal = document.getElementById('chartFullscreenModal');
-            document.getElementById('modalChartTitle').innerHTML = `<span>📊</span> ${spec.title} <span class="hud-badge" style="margin-right: 8px;">${spec.type}</span>`;
-            document.getElementById('modalChartTelemetry').innerHTML = `
-                <div style="color: var(--fin-gold); font-weight: 800;">⚡ قراءة تنفيذية للمؤشر:</div>
-                <div style="color: #E2E8F0;">${spec.insights}</div>
-            `;
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-            playChime(880, 0.1);
-
-            const chartConfig = {
-                responsive: true,
-                displayModeBar: false,
-                scrollZoom: false,
-                doubleClick: false,
-                showAxisDragHandles: false,
-                showAxisRangeEntryBoxes: false,
-                staticPlot: false
-            };
-
-            Plotly.newPlot('modalChartContent', spec.data(), spec.layout, chartConfig);
-            lockPlotlyDragLayer();
-        }
-
-        function closeChartFullscreen() {
-            const modal = document.getElementById('chartFullscreenModal');
-            modal.classList.remove('active');
-            document.body.style.overflow = '';
-            playChime(440, 0.08);
-        }
-
-        // Close on ESC Key
+        // Close Briefing on ESC Key
         window.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closeChartFullscreen();
-                if (briefingActive) toggleExecutiveBriefing();
+            if (e.key === 'Escape' && briefingActive) {
+                toggleExecutiveBriefing();
             }
         });
 
-        // Ambient Cyber Dust Particle Canvas
+        // Ambient Cyber Dust Particle Canvas (Silky 60FPS Fluid Physics)
         function initHoloParticles() {
             const canvas = document.getElementById('holoCanvas');
             const ctx = canvas.getContext('2d');
@@ -1061,14 +923,14 @@
             window.addEventListener('resize', resize);
 
             const particles = [];
-            const count = Math.min(50, Math.floor(window.innerWidth / 24));
+            const count = Math.min(45, Math.floor(window.innerWidth / 28));
             for (let i = 0; i < count; i++) {
                 particles.push({
                     x: Math.random() * w,
                     y: Math.random() * h,
-                    vx: (Math.random() - 0.5) * 0.4,
-                    vy: -Math.random() * 0.5 - 0.1,
-                    size: Math.random() * 2.2 + 0.8,
+                    vx: (Math.random() - 0.5) * 0.35,
+                    vy: -Math.random() * 0.45 - 0.15,
+                    size: Math.random() * 2.0 + 0.8,
                     color: Math.random() > 0.5 ? 'rgba(255, 215, 0,' : 'rgba(0, 240, 255,'
                 });
             }
@@ -1092,35 +954,31 @@
             animate();
         }
 
-        // Scroll Progress & HUD Depth Tracker
+        // Scroll Progress (Smooth Hardware Accelerated)
         function handleScroll() {
             const scrollTop = window.scrollY || document.documentElement.scrollTop;
             const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
             const pct = docHeight > 0 ? Math.min(100, Math.round((scrollTop / docHeight) * 100)) : 0;
-
             document.getElementById('laserProgress').style.width = pct + '%';
-            
-            let depthLabel = 'نظرة المحفظة السيادية';
-            if (pct > 25 && pct <= 55) depthLabel = 'الرسوم البيانية ومنحنيات النمو';
-            else if (pct > 55 && pct <= 85) depthLabel = 'محاكي إعادة توزيع الأصول';
-            else if (pct > 85) depthLabel = 'الاعتماد المؤسسي النهائي';
-
-            document.getElementById('hudDepthText').innerText = `عمق التصفح: ${pct}% • ${depthLabel}`;
         }
 
-        // 3D Perspective Tilt on Hover
+        // 3D Perspective Tilt on Hover with Damped Return Physics
         function initTilt() {
             document.querySelectorAll('.interactive-tilt').forEach(card => {
+                let rect = null;
+                card.addEventListener('mouseenter', () => {
+                    rect = card.getBoundingClientRect();
+                });
                 card.addEventListener('mousemove', (e) => {
-                    const rect = card.getBoundingClientRect();
+                    if (!rect) rect = card.getBoundingClientRect();
                     const x = e.clientX - rect.left - rect.width / 2;
                     const y = e.clientY - rect.top - rect.height / 2;
-                    const rotX = -(y / (rect.height / 2)) * 3.5;
-                    const rotY = (x / (rect.width / 2)) * 3.5;
-                    card.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateY(-2px)`;
+                    const rotX = -(y / (rect.height / 2)) * 3.0;
+                    const rotY = (x / (rect.width / 2)) * 3.0;
+                    card.style.transform = `perspective(1200px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateY(-3px)`;
                 });
                 card.addEventListener('mouseleave', () => {
-                    card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)';
+                    card.style.transform = 'perspective(1200px) rotateX(0deg) rotateY(0deg) translateY(0)';
                 });
             });
         }
@@ -1143,7 +1001,7 @@
             }, stepTime);
         }
 
-        // IntersectionObserver for Scroll Reveal & Telemetry
+        // IntersectionObserver for Silky Scroll Reveal & Telemetry
         function initObserver() {
             const obs = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
@@ -1188,7 +1046,7 @@
                 staticPlot: false
             };
 
-            // 1. Capital Growth Spline
+            // 1. Capital Growth Spline with Inflation Delta Benchmark
             Plotly.newPlot('plotGrowth', [
                 {
                     x: ['2026', '2027', '2028', '2029', '2030'],
@@ -1213,6 +1071,14 @@
                     line: { color: '#00F0FF', width: 3.5, shape: 'spline' },
                     mode: 'lines+markers',
                     marker: { size: 8, color: '#00F0FF' }
+                },
+                {
+                    x: ['2026', '2027', '2028', '2029', '2030'],
+                    y: [75.0, 93.3, 116.0, 144.3, 179.6],
+                    name: 'معدل التضخم السنوي (24.4% CBE Benchmark)',
+                    line: { color: '#EF4444', width: 2.2, dash: 'dash' },
+                    mode: 'lines',
+                    opacity: 0.85
                 }
             ], {
                 paper_bgcolor: 'rgba(0,0,0,0)',
