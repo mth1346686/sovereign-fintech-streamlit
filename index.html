@@ -238,6 +238,33 @@
             box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
         }
 
+        /* Per-Chart Dynamic Replay Micro-Button */
+        .btn-chart-replay {
+            background: rgba(255, 215, 0, 0.08);
+            border: 1px solid rgba(255, 215, 0, 0.35);
+            color: var(--fin-gold);
+            padding: 4px 11px;
+            border-radius: 8px;
+            font-size: 0.72rem;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 800;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            user-select: none;
+        }
+        .btn-chart-replay:hover {
+            background: var(--fin-gold);
+            color: #030712;
+            box-shadow: 0 0 14px rgba(255, 215, 0, 0.5);
+            transform: translateY(-1px) scale(1.03);
+        }
+        .btn-chart-replay:active {
+            transform: translateY(1px) scale(0.97);
+        }
+
         /* Palette Switcher Button */
         .btn-theme {
             background: rgba(255, 255, 255, 0.04);
@@ -697,6 +724,12 @@
                 <span id="themeName">الذهب السيادي</span>
             </button>
 
+            <!-- Master Replay Animations Button -->
+            <button class="btn-action" onclick="replayAllAnimations(true)" title="تشغيل وإعادة عرض كافة الحركات البيانية والصعود التفاعلي">
+                <span style="color: #FFD700;">💫</span>
+                <span>تشغيل الحركات</span>
+            </button>
+
             <!-- Instant PDF Boardroom Brief -->
             <a href="sovereign_executive_boardroom_briefing_2026.pdf" download="sovereign_executive_boardroom_briefing_2026.pdf" class="btn-action btn-pdf" title="تحميل تقرير مجلس الإدارة المعتمد بصيغة PDF">
                 <span>📄</span>
@@ -840,7 +873,12 @@
             <div class="glass-card chart-box hud-bracket scroll-reveal interactive-tilt delay-1" id="boxGrowth">
                 <div class="chart-head">
                     <h3><span>📈</span> توقعات تراكم نمو رأس المال لـ 5 سنوات ومقارنة التضخم</h3>
-                    <span class="hud-badge">Plotly Spline + CPI Guard</span>
+                    <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                        <button class="btn-chart-replay" onclick="animateGrowthSplines(true)" title="إعادة رسم المنحنى الحركي">
+                            <span>⚡</span><span>رسم المنحنى</span>
+                        </button>
+                        <span class="hud-badge">Plotly Spline + CPI Guard</span>
+                    </div>
                 </div>
                 <div id="plotGrowth" class="plot-container" style="width: 100%; height: 380px;"></div>
             </div>
@@ -848,7 +886,12 @@
             <div class="glass-card chart-box hud-bracket scroll-reveal interactive-tilt delay-2" id="boxDonut">
                 <div class="chart-head">
                     <h3><span>🪙</span> توزيع الأصول الرأسمالية ونسب المحفظة</h3>
-                    <span class="hud-badge">Plotly 3D Donut</span>
+                    <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                        <button class="btn-chart-replay" onclick="animateDonut(true)" title="إعادة تفتح شرائح الدونات">
+                            <span>⚡</span><span>تفتح الأصول</span>
+                        </button>
+                        <span class="hud-badge">Plotly 3D Donut</span>
+                    </div>
                 </div>
                 <div id="plotDonut" class="plot-container" style="width: 100%; height: 380px;"></div>
             </div>
@@ -859,7 +902,12 @@
             <div class="glass-card chart-box hud-bracket scroll-reveal interactive-tilt delay-1" id="boxYield">
                 <div class="chart-head">
                     <h3><span>🏛️</span> منحنى عوائد أذون الخزانة المصرية حسب فترات الاستحقاق</h3>
-                    <span class="hud-badge">T-Bills Curve</span>
+                    <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                        <button class="btn-chart-replay" onclick="animateYieldBars(true)" title="إعادة صعود الأعمدة الهيدروليكية الحركية">
+                            <span>⚡</span><span>صعود الأعمدة</span>
+                        </button>
+                        <span class="hud-badge">T-Bills Curve</span>
+                    </div>
                 </div>
                 <div id="plotYieldLadder" class="plot-container" style="width: 100%; height: 380px;"></div>
             </div>
@@ -867,7 +915,12 @@
             <div class="glass-card chart-box hud-bracket scroll-reveal interactive-tilt delay-2" id="boxRisk">
                 <div class="chart-head">
                     <h3><span>⚖️</span> مصفوفة العائد المحقق مقابل معامل المخاطرة والتذبذب</h3>
-                    <span class="hud-badge">Alpha vs Risk</span>
+                    <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                        <button class="btn-chart-replay" onclick="animateRiskMatrix(true)" title="إعادة إطلاق فقاعات المخاطر في الهواء">
+                            <span>⚡</span><span>إطلاق الفقاعات</span>
+                        </button>
+                        <span class="hud-badge">Alpha vs Risk</span>
+                    </div>
                 </div>
                 <div id="plotRiskMatrix" class="plot-container" style="width: 100%; height: 380px;"></div>
             </div>
@@ -1097,44 +1150,52 @@
             requestAnimationFrame(step);
         }
 
-        // Chart 1: T-Bills Yield Ladder Rising Bars Animation
+        // Chart 1: T-Bills Yield Ladder Rising Bars Animation (Async Stepped Engine)
         let yieldAnimRunning = false;
-        function animateYieldBars() {
+        async function animateYieldBars(force = false) {
             if (yieldAnimRunning) return;
             yieldAnimRunning = true;
+            playChime(1320, 0.08);
+
             const targetY = [28.50, 27.90, 27.45, 27.25];
             const baseMin = 20.0;
-            const startTime = performance.now();
-            const duration = 1300;
 
-            function frame(now) {
-                const elapsed = now - startTime;
-                const progress = Math.min(elapsed / duration, 1);
+            // Reset to base 20.0% so the user clearly sees the climb
+            try {
+                await Plotly.restyle('plotYieldLadder', { 
+                    y: [[baseMin, baseMin, baseMin, baseMin]], 
+                    text: [['20.00%', '20.00%', '20.00%', '20.00%']] 
+                }, [0]);
+            } catch(e) {}
+
+            await new Promise(r => setTimeout(r, 60));
+
+            const totalSteps = 24;
+            for (let step = 1; step <= totalSteps; step++) {
+                const progress = step / totalSteps;
                 const ease = easeOutCubic(progress);
-
                 const currentY = targetY.map(t => Number((baseMin + (t - baseMin) * ease).toFixed(2)));
                 const currentText = currentY.map(y => y.toFixed(2) + '%');
 
-                Plotly.restyle('plotYieldLadder', { y: [currentY], text: [currentText] }, [0]);
-
-                if (progress < 1) {
-                    requestAnimationFrame(frame);
-                } else {
-                    Plotly.restyle('plotYieldLadder', { 
-                        y: [targetY], 
-                        text: [['28.50%', '27.90%', '27.45%', '27.25%']] 
+                try {
+                    await Plotly.restyle('plotYieldLadder', { 
+                        y: [currentY], 
+                        text: [currentText] 
                     }, [0]);
-                    yieldAnimRunning = false;
-                }
+                } catch(e) {}
+
+                await new Promise(r => setTimeout(r, 38));
             }
-            requestAnimationFrame(frame);
+
+            yieldAnimRunning = false;
         }
 
-        // Chart 2: 5-Year Horizon Spline Growth Animation
+        // Chart 2: 5-Year Horizon Spline Growth Animation (Async Stepped Engine)
         let growthAnimRunning = false;
-        function animateGrowthSplines() {
+        async function animateGrowthSplines(force = false) {
             if (growthAnimRunning) return;
             growthAnimRunning = true;
+            playChime(1175, 0.08);
 
             const targets = [
                 [75.0, 95.4, 121.4, 154.5, 196.6],
@@ -1143,12 +1204,17 @@
                 [75.0, 93.3, 116.0, 144.3, 179.6]
             ];
 
-            const startTime = performance.now();
-            const duration = 1400;
+            // Reset to flat base lines
+            const baseLines = targets.map(curve => curve.map(() => curve[0]));
+            try {
+                await Plotly.restyle('plotGrowth', { y: baseLines }, [0, 1, 2, 3]);
+            } catch(e) {}
 
-            function frame(now) {
-                const elapsed = now - startTime;
-                const progress = Math.min(elapsed / duration, 1);
+            await new Promise(r => setTimeout(r, 60));
+
+            const totalSteps = 22;
+            for (let step = 1; step <= totalSteps; step++) {
+                const progress = step / totalSteps;
                 const ease = easeOutCubic(progress);
 
                 const currentY = targets.map(curve => {
@@ -1156,91 +1222,96 @@
                     return curve.map(v => Number((startVal + (v - startVal) * ease).toFixed(1)));
                 });
 
-                Plotly.restyle('plotGrowth', { y: currentY }, [0, 1, 2, 3]);
+                try {
+                    await Plotly.restyle('plotGrowth', { y: currentY }, [0, 1, 2, 3]);
+                } catch(e) {}
 
-                if (progress < 1) {
-                    requestAnimationFrame(frame);
-                } else {
-                    Plotly.restyle('plotGrowth', { y: targets }, [0, 1, 2, 3]);
-                    growthAnimRunning = false;
-                }
+                await new Promise(r => setTimeout(r, 38));
             }
-            requestAnimationFrame(frame);
+
+            growthAnimRunning = false;
         }
 
-        // Chart 3: Asset Allocation 3D Donut Bloom Animation
+        // Chart 3: Asset Allocation 3D Donut Bloom Animation (Async Stepped Engine)
         let donutAnimRunning = false;
-        function animateDonut() {
+        async function animateDonut(force = false) {
             if (donutAnimRunning) return;
             donutAnimRunning = true;
+            playChime(1480, 0.08);
+
             const targetVals = [75.0, 42.5, 38.2, 29.7];
-            const startTime = performance.now();
-            const duration = 1200;
 
-            function frame(now) {
-                const elapsed = now - startTime;
-                const progress = Math.min(elapsed / duration, 1);
+            // Reset to tiny wedges
+            try {
+                await Plotly.restyle('plotDonut', { values: [[0.05, 0.05, 0.05, 0.05]] }, [0]);
+            } catch(e) {}
+
+            await new Promise(r => setTimeout(r, 60));
+
+            const totalSteps = 20;
+            for (let step = 1; step <= totalSteps; step++) {
+                const progress = step / totalSteps;
                 const ease = easeOutCubic(progress);
-
                 const currentVals = targetVals.map(v => Math.max(0.05, Number((v * ease).toFixed(1))));
 
-                Plotly.restyle('plotDonut', { values: [currentVals] }, [0]);
+                try {
+                    await Plotly.restyle('plotDonut', { values: [currentVals] }, [0]);
+                } catch(e) {}
 
-                if (progress < 1) {
-                    requestAnimationFrame(frame);
-                } else {
-                    Plotly.restyle('plotDonut', { values: [targetVals] }, [0]);
-                    donutAnimRunning = false;
-                }
+                await new Promise(r => setTimeout(r, 40));
             }
-            requestAnimationFrame(frame);
+
+            donutAnimRunning = false;
         }
 
-        // Chart 4: Risk-Return Scatter Matrix Bubble Launch Animation
+        // Chart 4: Risk-Return Scatter Matrix Bubble Launch Animation (Async Stepped Engine)
         let riskAnimRunning = false;
-        function animateRiskMatrix() {
+        async function animateRiskMatrix(force = false) {
             if (riskAnimRunning) return;
             riskAnimRunning = true;
+            playChime(1046, 0.08);
 
             const isMobile = window.innerWidth <= 768;
             const targetY = [27.25, 38.60, 29.40, 14.80];
             const targetSizes = isMobile ? [28, 38, 34, 28] : [32, 40, 36, 30];
-            const startTime = performance.now();
-            const duration = 1300;
 
-            function frame(now) {
-                const elapsed = now - startTime;
-                const progress = Math.min(elapsed / duration, 1);
+            // Reset to base
+            try {
+                await Plotly.restyle('plotRiskMatrix', { 
+                    y: [[10.0, 10.0, 10.0, 10.0]],
+                    'marker.size': [[2, 2, 2, 2]]
+                }, [0]);
+            } catch(e) {}
+
+            await new Promise(r => setTimeout(r, 60));
+
+            const totalSteps = 22;
+            for (let step = 1; step <= totalSteps; step++) {
+                const progress = step / totalSteps;
                 const ease = easeOutCubic(progress);
-
                 const currentY = targetY.map(y => Number((10.0 + (y - 10.0) * ease).toFixed(2)));
                 const currentSizes = targetSizes.map(s => Number((2.0 + (s - 2.0) * ease).toFixed(1)));
 
-                Plotly.restyle('plotRiskMatrix', { 
-                    y: [currentY],
-                    'marker.size': [currentSizes]
-                }, [0]);
-
-                if (progress < 1) {
-                    requestAnimationFrame(frame);
-                } else {
-                    Plotly.restyle('plotRiskMatrix', { 
-                        y: [targetY],
-                        'marker.size': [targetSizes]
+                try {
+                    await Plotly.restyle('plotRiskMatrix', { 
+                        y: [currentY],
+                        'marker.size': [currentSizes]
                     }, [0]);
-                    riskAnimRunning = false;
-                }
+                } catch(e) {}
+
+                await new Promise(r => setTimeout(r, 38));
             }
-            requestAnimationFrame(frame);
+
+            riskAnimRunning = false;
         }
 
-        // Master Replay Animations Button Action
-        function replayAllAnimations() {
+        // Master Replay Animations Action (Full Screen Cinematic Showcase)
+        async function replayAllAnimations(scrollDown = false) {
             playChime(1320, 0.12);
             confetti({
-                particleCount: 50,
+                particleCount: 65,
                 spread: 80,
-                origin: { y: 0.25 },
+                origin: { y: 0.3 },
                 colors: ['#FFD700', '#F59E0B', '#10B981', '#00F0FF']
             });
 
@@ -1251,11 +1322,16 @@
             animateCounter(document.getElementById('kpi-equity'), 38.2, 1, '', 'مليون ج.م', 1400);
             animateCounter(document.getElementById('kpi-realestate'), 29.7, 1, '', 'مليون ج.م', 1500);
 
-            // Re-run all chart animations
-            setTimeout(animateGrowthSplines, 100);
-            setTimeout(animateDonut, 200);
-            setTimeout(animateYieldBars, 300);
-            setTimeout(animateRiskMatrix, 400);
+            if (scrollDown) {
+                const growthEl = document.getElementById('boxGrowth');
+                if (growthEl) growthEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+
+            // Staggered execution of all 4 charts
+            setTimeout(() => animateGrowthSplines(true), 150);
+            setTimeout(() => animateDonut(true), 320);
+            setTimeout(() => animateYieldBars(true), 520);
+            setTimeout(() => animateRiskMatrix(true), 720);
         }
 
         // Snappy Scroll Reveal & Dynamic Interactive Observer
@@ -1279,87 +1355,73 @@
                             animateCounter(document.getElementById('kpi-realestate'), 29.7, 1, '', 'مليون ج.م', 1500);
                         }
 
-                        // Trigger dynamic chart animations automatically on scroll
+                        // Trigger dynamic chart animations strictly on scroll when in view
                         if (el.id === 'boxGrowth' && !el.dataset.animated) {
                             el.dataset.animated = 'true';
-                            setTimeout(animateGrowthSplines, 100);
+                            setTimeout(() => animateGrowthSplines(), 120);
                         }
                         if (el.id === 'boxDonut' && !el.dataset.animated) {
                             el.dataset.animated = 'true';
-                            setTimeout(animateDonut, 150);
+                            setTimeout(() => animateDonut(), 160);
                         }
                         if (el.id === 'boxYield' && !el.dataset.animated) {
                             el.dataset.animated = 'true';
-                            setTimeout(animateYieldBars, 120);
+                            setTimeout(() => animateYieldBars(), 120);
                         }
                         if (el.id === 'boxRisk' && !el.dataset.animated) {
                             el.dataset.animated = 'true';
-                            setTimeout(animateRiskMatrix, 160);
+                            setTimeout(() => animateRiskMatrix(), 160);
                         }
 
                         obs.unobserve(el);
                     }
                 });
-            }, { threshold: 0.05, rootMargin: '60px 0px 60px 0px' });
+            }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
 
             document.querySelectorAll('.scroll-reveal').forEach(el => obs.observe(el));
         }
 
-        // Active Viewport Checker for 100% Automated Scroll & View Trigger
+        // Active Viewport Checker for Continuous Scroll Trigger
         function checkVisibleCharts() {
             const vh = window.innerHeight || document.documentElement.clientHeight;
 
             const elGrowth = document.getElementById('boxGrowth');
             if (elGrowth && !elGrowth.dataset.animated) {
                 const rect = elGrowth.getBoundingClientRect();
-                if (rect.top < vh * 0.95 && rect.bottom > 0) {
+                if (rect.top < vh * 0.80 && rect.bottom > 120) {
                     elGrowth.dataset.animated = 'true';
                     elGrowth.classList.add('revealed');
-                    setTimeout(animateGrowthSplines, 100);
+                    setTimeout(() => animateGrowthSplines(), 100);
                 }
             }
 
             const elDonut = document.getElementById('boxDonut');
             if (elDonut && !elDonut.dataset.animated) {
                 const rect = elDonut.getBoundingClientRect();
-                if (rect.top < vh * 0.95 && rect.bottom > 0) {
+                if (rect.top < vh * 0.80 && rect.bottom > 120) {
                     elDonut.dataset.animated = 'true';
                     elDonut.classList.add('revealed');
-                    setTimeout(animateDonut, 150);
+                    setTimeout(() => animateDonut(), 150);
                 }
             }
 
             const elYield = document.getElementById('boxYield');
             if (elYield && !elYield.dataset.animated) {
                 const rect = elYield.getBoundingClientRect();
-                if (rect.top < vh * 0.92 && rect.bottom > 0) {
+                if (rect.top < vh * 0.80 && rect.bottom > 120) {
                     elYield.dataset.animated = 'true';
                     elYield.classList.add('revealed');
-                    setTimeout(animateYieldBars, 120);
+                    setTimeout(() => animateYieldBars(), 120);
                 }
             }
 
             const elRisk = document.getElementById('boxRisk');
             if (elRisk && !elRisk.dataset.animated) {
                 const rect = elRisk.getBoundingClientRect();
-                if (rect.top < vh * 0.92 && rect.bottom > 0) {
+                if (rect.top < vh * 0.80 && rect.bottom > 120) {
                     elRisk.dataset.animated = 'true';
                     elRisk.classList.add('revealed');
-                    setTimeout(animateRiskMatrix, 160);
-                }
-            }
-
-            // Fallback for fast scroll or deep mobile view
-            if (window.scrollY > 280) {
-                if (elYield && !elYield.dataset.animated) {
-                    elYield.dataset.animated = 'true';
-                    elYield.classList.add('revealed');
-                    setTimeout(animateYieldBars, 100);
-                }
-                if (elRisk && !elRisk.dataset.animated) {
-                    elRisk.dataset.animated = 'true';
-                    elRisk.classList.add('revealed');
-                    setTimeout(animateRiskMatrix, 140);
+                    setTimeout(() => animateRiskMatrix(), 160);
                 }
             }
         }
@@ -1616,7 +1678,7 @@
             recalculatePortfolio();
             setInterval(lockPlotlyDragLayer, 1000);
 
-            // 100% Automated Animation Orchestration on Page Load
+            // Staggered initialization: Banner & KPIs first
             setTimeout(() => {
                 const banner = document.getElementById('bannerExecutive');
                 if (banner && !banner.dataset.animated) {
@@ -1633,27 +1695,12 @@
                     animateCounter(document.getElementById('kpi-equity'), 38.2, 1, '', 'مليون ج.م', 1400);
                     animateCounter(document.getElementById('kpi-realestate'), 29.7, 1, '', 'مليون ج.م', 1500);
                 }
-
-                // Automatically trigger Row 1 Charts (Growth Spline & Donut)
-                const bg = document.getElementById('boxGrowth');
-                if (bg && !bg.dataset.animated) {
-                    bg.classList.add('revealed');
-                    bg.dataset.animated = 'true';
-                    setTimeout(animateGrowthSplines, 200);
-                }
-                const bd = document.getElementById('boxDonut');
-                if (bd && !bd.dataset.animated) {
-                    bd.classList.add('revealed');
-                    bd.dataset.animated = 'true';
-                    setTimeout(animateDonut, 350);
-                }
-
-                // Check Row 2 Charts in case screen is high-res desktop
+                // Check if any charts are visible (desktop/tablet)
                 checkVisibleCharts();
             }, 300);
 
-            // Secondary failsafe check
-            setTimeout(checkVisibleCharts, 800);
+            // Additional check on load complete
+            setTimeout(checkVisibleCharts, 600);
         });
     </script>
 </body>
