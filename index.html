@@ -933,10 +933,10 @@
                 <span id="themeModeLabel">الوضع الفاتح</span>
             </button>
 
-            <!-- 2. Updated A4 Executive Briefing PDF Download Button -->
-            <a href="sovereign_executive_boardroom_briefing_2026.pdf" download="sovereign_executive_boardroom_briefing_2026.pdf" class="btn-action btn-pdf" title="تحميل تقرير مجلس الإدارة المعتمد A4 المحدث بالبيانات الحية لعام 2026">
+            <!-- 2. Dynamic A4 Executive Briefing PDF Download Button (Adapts to Active Theme) -->
+            <a href="sovereign_executive_boardroom_briefing_2026.pdf" download="sovereign_executive_boardroom_briefing_2026.pdf" class="btn-action btn-pdf" id="pdfDownloadLink" title="تحميل تقرير مجلس الإدارة المعتمد A4 المحدث بالبيانات الحية لعام 2026">
                 <span>📄</span>
-                <span>تحميل تقرير A4 المعتمد</span>
+                <span id="pdfBtnLabel">تحميل تقرير A4 (داكن)</span>
             </a>
         </div>
 
@@ -1232,6 +1232,8 @@
             playChime(1175, 0.08);
             const icon = document.getElementById('themeModeIcon');
             const label = document.getElementById('themeModeLabel');
+            const pdfLink = document.getElementById('pdfDownloadLink');
+            const pdfLabel = document.getElementById('pdfBtnLabel');
 
             if (currentThemeMode === 'dark') {
                 currentThemeMode = 'light';
@@ -1239,12 +1241,28 @@
                 document.body.classList.add('theme-light');
                 if (icon) icon.innerText = '🌙';
                 if (label) label.innerText = 'الوضع الداكن';
+                if (pdfLink) {
+                    pdfLink.href = 'sovereign_executive_boardroom_briefing_2026_light.pdf';
+                    pdfLink.download = 'sovereign_executive_boardroom_briefing_2026_light.pdf';
+                    pdfLink.title = 'تحميل تقرير مجلس الإدارة A4 المعتمد (الوضع الفاتح المخصص)';
+                }
+                if (pdfLabel) {
+                    pdfLabel.innerText = 'تحميل تقرير A4 (فاتح)';
+                }
                 updatePlotsTheme('light');
             } else {
                 currentThemeMode = 'dark';
                 document.body.classList.remove('theme-light');
                 if (icon) icon.innerText = '☀️';
                 if (label) label.innerText = 'الوضع الفاتح';
+                if (pdfLink) {
+                    pdfLink.href = 'sovereign_executive_boardroom_briefing_2026.pdf';
+                    pdfLink.download = 'sovereign_executive_boardroom_briefing_2026.pdf';
+                    pdfLink.title = 'تحميل تقرير مجلس الإدارة A4 المعتمد (الوضع الداكن المعتمد)';
+                }
+                if (pdfLabel) {
+                    pdfLabel.innerText = 'تحميل تقرير A4 (داكن)';
+                }
                 updatePlotsTheme('dark');
             }
             try {
