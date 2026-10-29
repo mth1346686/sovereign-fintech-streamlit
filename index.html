@@ -389,14 +389,15 @@
             padding: 24px;
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 16px;
+            min-height: 440px;
         }
         .chart-head {
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 12px;
         }
         .chart-head h3 {
             font-size: 1.05rem;
@@ -404,6 +405,14 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            line-height: 1.5;
+            word-break: break-word;
+        }
+        .plot-container {
+            width: 100%;
+            height: 380px;
+            min-height: 380px;
+            position: relative;
         }
 
         /* Simulator Slider Section */
@@ -463,9 +472,76 @@
         }
 
         @media (max-width: 768px) {
-            .charts-row-2 { grid-template-columns: 1fr; }
-            .sim-grid { grid-template-columns: 1fr; }
-            .kpi-number { font-size: 1.85rem; }
+            body {
+                padding: 0 10px 24px 10px;
+            }
+            .hud-topbar {
+                padding: 10px 14px;
+                gap: 8px;
+            }
+            .hud-topbar h1 {
+                font-size: 0.96rem !important;
+                flex-wrap: wrap;
+            }
+            .action-group {
+                width: 100%;
+                justify-content: space-between;
+                gap: 6px;
+            }
+            .btn-theme, .btn-action {
+                padding: 6px 10px;
+                font-size: 0.76rem;
+            }
+            .charts-row-2 { 
+                grid-template-columns: 1fr; 
+                gap: 20px;
+            }
+            .chart-box {
+                padding: 18px 14px;
+                min-height: 430px;
+            }
+            .chart-head h3 {
+                font-size: 0.95rem;
+                line-height: 1.45;
+            }
+            .hud-badge {
+                font-size: 0.7rem;
+                padding: 3px 8px;
+            }
+            .kpi-grid {
+                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+                gap: 14px;
+            }
+            .kpi-item {
+                padding: 16px 14px;
+            }
+            .kpi-number { 
+                font-size: 1.7rem; 
+            }
+            .sim-grid { 
+                grid-template-columns: 1fr; 
+                gap: 16px;
+            }
+            #hudCapsule {
+                width: 44px;
+                height: 44px;
+                padding: 0;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                bottom: 16px;
+                left: 16px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.8), 0 0 14px var(--theme-glow);
+            }
+            #hudCapsule .capsule-label,
+            #hudCapsule .radar-dot {
+                display: none !important;
+            }
+            .plot-container {
+                height: 380px !important;
+                min-height: 380px !important;
+            }
         }
     </style>
 </head>
@@ -479,8 +555,8 @@
     <!-- Minimalist Back to Top Capsule -->
     <div id="hudCapsule" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="انقر للصعود لأعلى الصفحة">
         <div class="radar-dot"></div>
-        <span>المحفظة السيادية • بث لحظي 2026</span>
-        <span style="font-size: 0.8rem; opacity: 0.8;">▲</span>
+        <span class="capsule-label">المحفظة السيادية • بث لحظي 2026</span>
+        <span style="font-size: 0.85rem; font-weight: 900;">▲</span>
     </div>
 
     <!-- HUD Header -->
@@ -612,7 +688,7 @@
                     <h3><span>📈</span> توقعات تراكم نمو رأس المال لـ 5 سنوات ومقارنة التضخم</h3>
                     <span class="hud-badge">Plotly Spline + CPI Guard</span>
                 </div>
-                <div id="plotGrowth" style="width: 100%; height: 350px;"></div>
+                <div id="plotGrowth" class="plot-container" style="width: 100%; height: 380px;"></div>
             </div>
 
             <div class="glass-card chart-box hud-bracket scroll-reveal interactive-tilt delay-2 revealed">
@@ -620,7 +696,7 @@
                     <h3><span>🪙</span> توزيع الأصول الرأسمالية ونسب المحفظة</h3>
                     <span class="hud-badge">Plotly 3D Donut</span>
                 </div>
-                <div id="plotDonut" style="width: 100%; height: 350px;"></div>
+                <div id="plotDonut" class="plot-container" style="width: 100%; height: 380px;"></div>
             </div>
         </div>
 
@@ -631,7 +707,7 @@
                     <h3><span>🏛️</span> منحنى عوائد أذون الخزانة المصرية حسب فترات الاستحقاق</h3>
                     <span class="hud-badge">T-Bills Curve</span>
                 </div>
-                <div id="plotYieldLadder" style="width: 100%; height: 350px;"></div>
+                <div id="plotYieldLadder" class="plot-container" style="width: 100%; height: 380px;"></div>
             </div>
 
             <div class="glass-card chart-box hud-bracket scroll-reveal interactive-tilt delay-2 revealed">
@@ -639,7 +715,7 @@
                     <h3><span>⚖️</span> مصفوفة العائد المحقق مقابل معامل المخاطرة والتذبذب</h3>
                     <span class="hud-badge">Alpha vs Risk</span>
                 </div>
-                <div id="plotRiskMatrix" style="width: 100%; height: 350px;"></div>
+                <div id="plotRiskMatrix" class="plot-container" style="width: 100%; height: 380px;"></div>
             </div>
         </div>
 
@@ -899,8 +975,9 @@
             });
         }
 
-        // Render Plotly Visualizations (Ultra-Crisp Legible Labels, Fixed Range, Zero Zoom)
+        // Render Plotly Visualizations (Ultra-Crisp Legible Labels, Fixed Range, Zero Clipping)
         function renderPlots() {
+            const isMobile = window.innerWidth <= 768;
             const chartConfig = {
                 responsive: true,
                 displayModeBar: false,
@@ -916,7 +993,7 @@
                 {
                     x: ['2026', '2027', '2028', '2029', '2030'],
                     y: [75.0, 95.4, 121.4, 154.5, 196.6],
-                    name: 'أذون الخزانة المصرية (27.25%)',
+                    name: 'أذون الخزانة (27.25%)',
                     line: { color: '#FFD700', width: 3.8, shape: 'spline' },
                     mode: 'lines+markers',
                     marker: { size: 9, color: '#FFD700' }
@@ -924,7 +1001,7 @@
                 {
                     x: ['2026', '2027', '2028', '2029', '2030'],
                     y: [42.5, 58.9, 81.6, 113.1, 156.8],
-                    name: 'سبائك الذهب الفعلي (38.6%)',
+                    name: 'سبائك الذهب (38.6%)',
                     line: { color: '#F59E0B', width: 3.8, dash: 'dot', shape: 'spline' },
                     mode: 'lines+markers',
                     marker: { size: 9, color: '#F59E0B' }
@@ -932,7 +1009,7 @@
                 {
                     x: ['2026', '2027', '2028', '2029', '2030'],
                     y: [38.2, 49.4, 63.9, 82.7, 107.0],
-                    name: 'أسهم البورصة EGX30 (29.4%)',
+                    name: 'أسهم EGX30 (29.4%)',
                     line: { color: '#00F0FF', width: 3.8, shape: 'spline' },
                     mode: 'lines+markers',
                     marker: { size: 9, color: '#00F0FF' }
@@ -940,7 +1017,7 @@
                 {
                     x: ['2026', '2027', '2028', '2029', '2030'],
                     y: [75.0, 93.3, 116.0, 144.3, 179.6],
-                    name: 'معدل التضخم السنوي (24.4% CBE)',
+                    name: 'التضخم (24.4% CBE)',
                     line: { color: '#EF4444', width: 2.5, dash: 'dash' },
                     mode: 'lines',
                     opacity: 0.9
@@ -948,20 +1025,29 @@
             ], {
                 paper_bgcolor: 'rgba(0,0,0,0)',
                 plot_bgcolor: 'rgba(0,0,0,0)',
-                font: { color: '#F8FAFC', family: 'Cairo', size: 13, weight: 700 },
-                margin: { l: 45, r: 25, t: 35, b: 45 },
-                legend: { orientation: 'h', y: 1.18, x: 0.5, xanchor: 'center', font: { size: 12.5, color: '#F8FAFC' } },
+                font: { color: '#F8FAFC', family: 'Cairo', size: 12.5, weight: 700 },
+                margin: { l: isMobile ? 38 : 45, r: 20, t: 25, b: isMobile ? 70 : 60, automargin: true },
+                legend: { 
+                    orientation: 'h', 
+                    y: isMobile ? -0.25 : -0.20, 
+                    x: 0.5, 
+                    xanchor: 'center', 
+                    font: { size: isMobile ? 11 : 12, color: '#F8FAFC', family: 'Cairo' },
+                    bgcolor: 'transparent'
+                },
                 dragmode: false,
                 xaxis: { 
                     showgrid: false, 
                     fixedrange: true,
-                    tickfont: { color: '#F8FAFC', size: 13, family: 'Cairo', weight: 800 }
+                    automargin: true,
+                    tickfont: { color: '#F8FAFC', size: 12.5, family: 'Cairo', weight: 800 }
                 },
                 yaxis: { 
                     showgrid: true, 
                     gridcolor: 'rgba(255,255,255,0.08)', 
                     fixedrange: true,
-                    tickfont: { color: '#CBD5E1', size: 12.5, family: 'Cairo', weight: 700 }
+                    automargin: true,
+                    tickfont: { color: '#CBD5E1', size: 12, family: 'Cairo', weight: 700 }
                 }
             }, chartConfig);
 
@@ -975,23 +1061,30 @@
                     colors: ['#FFD700', '#F59E0B', '#00F0FF', '#10B981'],
                     line: { color: '#030712', width: 2.8 }
                 },
-                textinfo: 'label+percent',
+                textinfo: 'percent',
                 textposition: 'inside',
-                insidetextfont: { color: '#FFFFFF', size: 13, family: 'Cairo', weight: 800 },
+                insidetextfont: { color: '#FFFFFF', size: isMobile ? 13 : 15, family: 'Cairo', weight: 900 },
                 hoverinfo: 'label+value+percent'
             }], {
                 paper_bgcolor: 'rgba(0,0,0,0)',
                 plot_bgcolor: 'rgba(0,0,0,0)',
-                font: { color: '#F8FAFC', family: 'Cairo', size: 13 },
+                font: { color: '#F8FAFC', family: 'Cairo', size: 12 },
                 showlegend: true,
-                legend: { orientation: 'h', y: -0.12, font: { color: '#F8FAFC', size: 12 } },
+                legend: { 
+                    orientation: 'h', 
+                    y: isMobile ? -0.22 : -0.18, 
+                    x: 0.5, 
+                    xanchor: 'center', 
+                    font: { color: '#F8FAFC', size: isMobile ? 11 : 12, family: 'Cairo' },
+                    bgcolor: 'transparent'
+                },
                 dragmode: false,
-                margin: { l: 20, r: 20, t: 20, b: 40 }
+                margin: { l: 20, r: 20, t: 20, b: isMobile ? 65 : 50, automargin: true }
             }, chartConfig);
 
-            // 3. T-Bills Yield Ladder (High-Contrast Bold Outside Percentages)
+            // 3. T-Bills Yield Ladder (High-Contrast Bold Outside Percentages & Clean Two-Line Labels)
             Plotly.newPlot('plotYieldLadder', [{
-                x: ['3 شهور (91 يوم)', '6 شهور (182 يوم)', '9 شهور (273 يوم)', 'سنة كاملة (364 يوم)'],
+                x: ['3 شهور<br>(91 يوم)', '6 شهور<br>(182 يوم)', '9 شهور<br>(273 يوم)', 'سنة كاملة<br>(364 يوم)'],
                 y: [28.50, 27.90, 27.45, 27.25],
                 type: 'bar',
                 marker: {
@@ -1000,23 +1093,26 @@
                 },
                 text: ['28.50%', '27.90%', '27.45%', '27.25%'],
                 textposition: 'outside',
-                textfont: { color: '#FFD700', size: 14, family: 'Cairo', weight: 900 }
+                textfont: { color: '#FFD700', size: isMobile ? 13 : 14.5, family: 'Cairo', weight: 900 }
             }], {
                 paper_bgcolor: 'rgba(0,0,0,0)',
                 plot_bgcolor: 'rgba(0,0,0,0)',
-                font: { color: '#F8FAFC', family: 'Cairo', size: 13 },
-                margin: { l: 40, r: 25, t: 35, b: 45 },
+                font: { color: '#F8FAFC', family: 'Cairo', size: 12.5 },
+                margin: { l: isMobile ? 38 : 45, r: 20, t: 30, b: isMobile ? 75 : 65, automargin: true },
                 dragmode: false,
                 xaxis: { 
                     showgrid: false, 
                     fixedrange: true,
-                    tickfont: { color: '#F8FAFC', size: 12.5, family: 'Cairo', weight: 700 }
+                    automargin: true,
+                    tickangle: 0,
+                    tickfont: { color: '#F8FAFC', size: isMobile ? 11.5 : 12.5, family: 'Cairo', weight: 800 }
                 },
                 yaxis: { 
                     showgrid: true, 
                     gridcolor: 'rgba(255,255,255,0.08)', 
-                    range: [20, 31.8], 
+                    range: [20, 32.5], 
                     fixedrange: true,
+                    automargin: true,
                     tickfont: { color: '#CBD5E1', size: 12, family: 'Cairo' }
                 }
             }, chartConfig);
@@ -1028,32 +1124,35 @@
                 mode: 'markers+text',
                 text: ['أذون الخزانة', 'سبائك الذهب', 'البورصة EGX30', 'العقارات المدرة'],
                 textposition: 'top center',
-                textfont: { color: '#FFFFFF', size: 13.5, family: 'Cairo', weight: 800 },
+                textfont: { color: '#FFFFFF', size: isMobile ? 12 : 13.5, family: 'Cairo', weight: 800 },
                 marker: {
-                    size: [32, 42, 38, 30],
+                    size: isMobile ? [28, 38, 34, 28] : [32, 42, 38, 30],
                     color: ['#FFD700', '#F59E0B', '#00F0FF', '#10B981'],
                     line: { color: '#FFFFFF', width: 2.2 }
                 }
             }], {
                 paper_bgcolor: 'rgba(0,0,0,0)',
                 plot_bgcolor: 'rgba(0,0,0,0)',
-                font: { color: '#F8FAFC', family: 'Cairo', size: 13 },
-                margin: { l: 45, r: 25, t: 40, b: 45 },
+                font: { color: '#F8FAFC', family: 'Cairo', size: 12.5 },
+                margin: { l: isMobile ? 45 : 55, r: 20, t: 35, b: isMobile ? 65 : 55, automargin: true },
                 dragmode: false,
                 xaxis: { 
-                    title: { text: 'مؤشر التذبذب والمخاطرة (%)', font: { color: '#94A3B8', size: 13, weight: 700 } },
+                    title: { text: 'مؤشر التذبذب والمخاطرة (%)', font: { color: '#94A3B8', size: isMobile ? 11.5 : 12.5, weight: 700 } },
                     showgrid: true, 
                     gridcolor: 'rgba(255,255,255,0.08)', 
                     fixedrange: true,
-                    tickfont: { color: '#F8FAFC', size: 12.5 }
+                    automargin: true,
+                    range: [0, 22],
+                    tickfont: { color: '#F8FAFC', size: 12 }
                 },
                 yaxis: { 
-                    title: { text: 'العائد السنوي الصافي (%)', font: { color: '#94A3B8', size: 13, weight: 700 } },
+                    title: { text: 'العائد السنوي الصافي (%)', font: { color: '#94A3B8', size: isMobile ? 11.5 : 12.5, weight: 700 } },
                     showgrid: true, 
                     gridcolor: 'rgba(255,255,255,0.08)', 
-                    range: [10, 44],
+                    range: [10, 48],
                     fixedrange: true,
-                    tickfont: { color: '#F8FAFC', size: 12.5 }
+                    automargin: true,
+                    tickfont: { color: '#F8FAFC', size: 12 }
                 }
             }, chartConfig);
 
@@ -1101,6 +1200,12 @@
             initTilt();
             initObserver();
             window.addEventListener('scroll', handleScroll, { passive: true });
+            window.addEventListener('resize', () => {
+                ['plotGrowth', 'plotDonut', 'plotYieldLadder', 'plotRiskMatrix'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) Plotly.Plots.resize(el);
+                });
+            }, { passive: true });
             document.body.addEventListener('click', initAudio, { once: true });
             renderPlots();
             recalculatePortfolio();
