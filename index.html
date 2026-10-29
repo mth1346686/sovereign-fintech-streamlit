@@ -51,6 +51,75 @@
             --laser-grad: linear-gradient(90deg, #00F0FF, #A855F7, #EC4899, #00F0FF);
         }
 
+        /* Executive Corporate Clean Light Theme */
+        body.theme-light {
+            --bg-deep: #F8FAFC;
+            --bg-card: rgba(255, 255, 255, 0.94);
+            --glass-border: rgba(15, 23, 42, 0.12);
+            --glass-border-focus: rgba(217, 119, 6, 0.6);
+            --text-main: #0F172A;
+            --text-dim: #64748B;
+            --theme-glow: rgba(217, 119, 6, 0.2);
+            --fin-gold: #D97706;
+            --fin-amber: #B45309;
+            --fin-cyan: #0284C7;
+            --fin-emerald: #059669;
+            background-color: #F8FAFC;
+            background-image: 
+                radial-gradient(circle at 10% 15%, rgba(217, 119, 6, 0.08) 0%, transparent 45%),
+                radial-gradient(circle at 85% 80%, rgba(2, 132, 199, 0.08) 0%, transparent 45%),
+                linear-gradient(180deg, #FFFFFF 0%, #F1F5F9 50%, #E2E8F0 100%);
+            color: #0F172A;
+        }
+
+        body.theme-light .hud-topbar {
+            background: rgba(255, 255, 255, 0.92);
+            border-bottom: 1px solid rgba(15, 23, 42, 0.12);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+        }
+
+        body.theme-light .glass-card {
+            background: rgba(255, 255, 255, 0.94);
+            border: 1px solid rgba(15, 23, 42, 0.12);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            color: #0F172A;
+        }
+
+        body.theme-light .laser-waveform-panel {
+            background: rgba(241, 245, 249, 0.9);
+            border-color: rgba(2, 132, 199, 0.3);
+        }
+
+        body.theme-light .hud-badge {
+            background: rgba(217, 119, 6, 0.1);
+            color: #B45309;
+            border-color: rgba(217, 119, 6, 0.3);
+        }
+
+        body.theme-light .btn-action {
+            background: rgba(15, 23, 42, 0.05);
+            border-color: rgba(15, 23, 42, 0.18);
+            color: #0F172A;
+        }
+
+        body.theme-light .btn-action:hover {
+            background: rgba(217, 119, 6, 0.1);
+            border-color: #D97706;
+            color: #B45309;
+        }
+
+        body.theme-light .btn-pdf {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.12), rgba(245, 158, 11, 0.12));
+            border-color: rgba(239, 68, 68, 0.4);
+            color: #DC2626;
+        }
+
+        body.theme-light .btn-chart-replay {
+            background: rgba(217, 119, 6, 0.1);
+            border-color: rgba(217, 119, 6, 0.4);
+            color: #B45309;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -718,29 +787,17 @@
         </div>
 
         <div class="action-group">
-            <!-- Palette Theme Switcher -->
-            <button class="btn-theme" onclick="cycleTheme()" title="تغيير ثيم الهولوجرام (ذهبي / زمردي / تيتانيوم)">
-                <span id="themeIcon">👑</span>
-                <span id="themeName">الذهب السيادي</span>
+            <!-- 1. Dark / Light Mode Switcher Button -->
+            <button class="btn-action" id="themeToggleBtn" onclick="toggleDarkLightTheme()" title="التبديل بين الوضع الداكن والوضع الفاتح">
+                <span id="themeModeIcon">☀️</span>
+                <span id="themeModeLabel">الوضع الفاتح</span>
             </button>
 
-            <!-- Master Replay Animations Button -->
-            <button class="btn-action" onclick="replayAllAnimations(true)" title="تشغيل وإعادة عرض كافة الحركات البيانية والصعود التفاعلي">
-                <span style="color: #FFD700;">💫</span>
-                <span>تشغيل الحركات</span>
-            </button>
-
-            <!-- Instant PDF Boardroom Brief -->
-            <a href="sovereign_executive_boardroom_briefing_2026.pdf" download="sovereign_executive_boardroom_briefing_2026.pdf" class="btn-action btn-pdf" title="تحميل تقرير مجلس الإدارة المعتمد بصيغة PDF">
+            <!-- 2. Updated A4 Executive Briefing PDF Download Button -->
+            <a href="sovereign_executive_boardroom_briefing_2026.pdf" download="sovereign_executive_boardroom_briefing_2026.pdf" class="btn-action btn-pdf" title="تحميل تقرير مجلس الإدارة المعتمد A4 المحدث بالبيانات الحية لعام 2026">
                 <span>📄</span>
-                <span>تقرير A4 التنفيذي</span>
+                <span>تحميل تقرير A4 المعتمد</span>
             </a>
-
-            <!-- Sound feedback -->
-            <button class="btn-action" id="audioToggleBtn" onclick="toggleSound()">
-                <span id="audioIcon">🔊</span>
-                <span id="audioLabel">الصوت</span>
-            </button>
         </div>
 
         <!-- Sovereign Laser Pulse Waveform Topbar Line -->
@@ -1027,35 +1084,58 @@
             } catch (e) {}
         }
 
-        function toggleSound() {
-            isAudioEnabled = !isAudioEnabled;
-            const icon = document.getElementById('audioIcon');
-            const label = document.getElementById('audioLabel');
-            if (isAudioEnabled) {
-                icon.innerText = '🔊';
-                label.innerText = 'الصوت';
-                playChime(987, 0.08);
+        // Audio is enabled permanently by default in background
+        // Dark / Light Theme Engine (Sovereign Dual Mode)
+        let currentThemeMode = 'dark';
+
+        function toggleDarkLightTheme() {
+            playChime(1175, 0.08);
+            const icon = document.getElementById('themeModeIcon');
+            const label = document.getElementById('themeModeLabel');
+
+            if (currentThemeMode === 'dark') {
+                currentThemeMode = 'light';
+                document.body.classList.remove('theme-emerald', 'theme-titanium');
+                document.body.classList.add('theme-light');
+                if (icon) icon.innerText = '🌙';
+                if (label) label.innerText = 'الوضع الداكن';
+                updatePlotsTheme('light');
             } else {
-                icon.innerText = '🔇';
-                label.innerText = 'صامت';
+                currentThemeMode = 'dark';
+                document.body.classList.remove('theme-light');
+                if (icon) icon.innerText = '☀️';
+                if (label) label.innerText = 'الوضع الفاتح';
+                updatePlotsTheme('dark');
             }
+            try {
+                localStorage.setItem('sovereign_theme_mode', currentThemeMode);
+            } catch(e) {}
         }
 
-        // Palette Switcher (3 Luxury Themes: Cyber Gold, Emerald, Titanium)
-        const themes = [
-            { id: 'gold', name: 'الذهب السيادي', icon: '👑', className: '' },
-            { id: 'emerald', name: 'الزمرد الاستثماري', icon: '💎', className: 'theme-emerald' },
-            { id: 'titanium', name: 'التيتانيوم الملكي', icon: '⚡', className: 'theme-titanium' }
-        ];
-        let currentThemeIndex = 0;
+        function updatePlotsTheme(mode) {
+            const isLight = mode === 'light';
+            const fontColor = isLight ? '#0F172A' : '#F8FAFC';
+            const gridColor = isLight ? 'rgba(15, 23, 42, 0.08)' : 'rgba(255, 255, 255, 0.08)';
 
-        function cycleTheme() {
-            currentThemeIndex = (currentThemeIndex + 1) % themes.length;
-            const t = themes[currentThemeIndex];
-            document.body.className = t.className;
-            document.getElementById('themeIcon').innerText = t.icon;
-            document.getElementById('themeName').innerText = t.name;
-            playChime(1175, 0.08);
+            const layoutUpdate = {
+                'font.color': fontColor,
+                'paper_bgcolor': 'rgba(0,0,0,0)',
+                'plot_bgcolor': 'rgba(0,0,0,0)',
+                'xaxis.tickfont.color': fontColor,
+                'yaxis.tickfont.color': fontColor,
+                'yaxis.gridcolor': gridColor
+            };
+
+            ['plotGrowth', 'plotYieldLadder', 'plotRiskMatrix'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el && el.data) {
+                    try { Plotly.relayout(el, layoutUpdate); } catch(e) {}
+                }
+            });
+            const donutEl = document.getElementById('plotDonut');
+            if (donutEl && donutEl.data) {
+                try { Plotly.relayout(donutEl, { 'font.color': fontColor }); } catch(e) {}
+            }
         }
 
         // Ambient Cyber Dust Particle Canvas (Lightweight & 60FPS)
