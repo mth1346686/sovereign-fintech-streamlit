@@ -249,7 +249,12 @@ class DashboardHandler(http.server.BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header("Content-type", "text/html; charset=utf-8")
         self.end_headers()
-        self.wfile.write(HTML_PAGE.encode("utf-8"))
+        index_path = os.path.join(os.path.dirname(__file__), "index.html")
+        if os.path.exists(index_path):
+            with open(index_path, "rb") as f:
+                self.wfile.write(f.read())
+        else:
+            self.wfile.write(HTML_PAGE.encode("utf-8"))
 
 if __name__ == "__main__":
     print(f"🚀 Sovereign Python Dashboard Server active at: http://localhost:{PORT}")
