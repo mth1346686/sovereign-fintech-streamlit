@@ -22,13 +22,12 @@
             --fin-purple: #A855F7;
             --fin-danger: #EF4444;
             --bg-deep: #030712;
-            --bg-card: rgba(15, 23, 42, 0.72);
-            --bg-card-hover: rgba(30, 41, 59, 0.88);
-            --glass-border: rgba(255, 215, 0, 0.22);
-            --glass-border-focus: rgba(0, 240, 255, 0.55);
+            --bg-card: rgba(15, 23, 42, 0.75);
+            --glass-border: rgba(255, 215, 0, 0.24);
+            --glass-border-focus: rgba(0, 240, 255, 0.6);
             --text-main: #F8FAFC;
             --text-dim: #94A3B8;
-            --theme-glow: rgba(255, 215, 0, 0.25);
+            --theme-glow: rgba(255, 215, 0, 0.28);
             --laser-grad: linear-gradient(90deg, #FFD700, #10B981, #00F0FF, #FFD700);
         }
 
@@ -36,8 +35,8 @@
         body.theme-emerald {
             --fin-gold: #10B981;
             --fin-amber: #059669;
-            --glass-border: rgba(16, 185, 129, 0.28);
-            --glass-border-focus: rgba(16, 185, 129, 0.65);
+            --glass-border: rgba(16, 185, 129, 0.3);
+            --glass-border-focus: rgba(16, 185, 129, 0.7);
             --theme-glow: rgba(16, 185, 129, 0.35);
             --laser-grad: linear-gradient(90deg, #10B981, #00F0FF, #34D399, #10B981);
         }
@@ -46,8 +45,8 @@
         body.theme-titanium {
             --fin-gold: #00F0FF;
             --fin-amber: #A855F7;
-            --glass-border: rgba(0, 240, 255, 0.28);
-            --glass-border-focus: rgba(168, 85, 247, 0.65);
+            --glass-border: rgba(0, 240, 255, 0.3);
+            --glass-border-focus: rgba(168, 85, 247, 0.7);
             --theme-glow: rgba(0, 240, 255, 0.35);
             --laser-grad: linear-gradient(90deg, #00F0FF, #A855F7, #EC4899, #00F0FF);
         }
@@ -65,13 +64,13 @@
             background-image: 
                 radial-gradient(circle at 10% 15%, rgba(255, 215, 0, 0.08) 0%, transparent 45%),
                 radial-gradient(circle at 85% 80%, rgba(0, 240, 255, 0.08) 0%, transparent 45%),
-                radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.05) 0%, transparent 60%),
+                radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.04) 0%, transparent 60%),
                 linear-gradient(180deg, #030712 0%, #070D1E 50%, #020617 100%);
             color: var(--text-main);
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
-            transition: background-color 0.4s ease, color 0.4s ease;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         /* 100% Locked Non-Zoomable Charts & Native Mobile Touch Scroll */
@@ -107,7 +106,7 @@
             background-size: 200% 100%;
             box-shadow: 0 0 16px var(--theme-glow);
             z-index: 10000;
-            transition: width 0.15s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transition: width 0.1s linear;
             animation: laserShimmer 3s linear infinite;
         }
         @keyframes laserShimmer {
@@ -115,7 +114,7 @@
             100% { background-position: -100% 0; }
         }
 
-        /* Canvas Cyber Dust Particles */
+        /* Canvas Cyber Dust Particles (Lightweight 60FPS) */
         #holoCanvas {
             position: fixed;
             top: 0;
@@ -126,12 +125,12 @@
             z-index: 1;
         }
 
-        /* Minimalist Status Capsule / Back to Top (NO "عمق المتصفح") */
+        /* Minimalist Back to Top Capsule */
         #hudCapsule {
             position: fixed;
             bottom: 24px;
             left: 24px;
-            background: rgba(15, 23, 42, 0.88);
+            background: rgba(15, 23, 42, 0.9);
             backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
             border-radius: 30px;
@@ -145,13 +144,13 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.75), 0 0 15px var(--theme-glow);
             z-index: 999;
             cursor: pointer;
-            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         }
         #hudCapsule:hover {
-            transform: translateY(-3px) scale(1.03);
+            transform: translateY(-2px) scale(1.02);
             border-color: var(--fin-cyan);
             color: var(--fin-cyan);
-            box-shadow: 0 14px 40px rgba(0, 0, 0, 0.85), 0 0 25px rgba(0, 240, 255, 0.4);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.85), 0 0 20px rgba(0, 240, 255, 0.4);
         }
         .radar-dot {
             width: 8px;
@@ -163,7 +162,7 @@
         }
         @keyframes radarPulse {
             0% { transform: scale(0.9); opacity: 0.6; }
-            50% { transform: scale(1.4); opacity: 1; }
+            50% { transform: scale(1.3); opacity: 1; }
             100% { transform: scale(0.9); opacity: 0.6; }
         }
 
@@ -171,7 +170,7 @@
         .hud-topbar {
             position: sticky;
             top: 0;
-            background: rgba(3, 7, 18, 0.85);
+            background: rgba(3, 7, 18, 0.88);
             backdrop-filter: blur(24px);
             border-bottom: 1px solid var(--glass-border);
             z-index: 900;
@@ -181,48 +180,50 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 12px;
-            transition: border-color 0.4s ease;
+            transition: border-color 0.3s ease;
         }
 
         .hud-badge {
             background: rgba(255, 215, 0, 0.12);
             border: 1px solid var(--glass-border);
             color: var(--fin-gold);
-            padding: 3px 10px;
+            padding: 4px 11px;
             border-radius: 8px;
-            font-size: 0.72rem;
+            font-size: 0.75rem;
             font-family: 'JetBrains Mono', monospace;
             font-weight: 700;
             letter-spacing: 0.5px;
-            transition: all 0.3s ease;
+            transition: all 0.25s ease;
         }
 
         .action-group {
             display: flex;
-            gap: 8px;
+            gap: 10px;
             align-items: center;
             flex-wrap: wrap;
         }
 
         .btn-action {
             background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.16);
             color: var(--text-main);
-            padding: 7px 15px;
+            padding: 8px 16px;
             border-radius: 12px;
             cursor: pointer;
-            font-size: 0.78rem;
+            font-size: 0.8rem;
             font-weight: 800;
             display: inline-flex;
             align-items: center;
             gap: 7px;
             text-decoration: none;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform;
+            transform: translateZ(0);
         }
         .btn-action:hover {
             border-color: var(--fin-cyan);
             color: var(--fin-cyan);
-            box-shadow: 0 0 14px rgba(0, 240, 255, 0.3);
+            box-shadow: 0 0 14px rgba(0, 240, 255, 0.35);
             transform: translateY(-2px);
         }
 
@@ -237,128 +238,42 @@
             box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
         }
 
-        .btn-briefing {
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(16, 185, 129, 0.15));
-            border: 1px solid var(--glass-border);
-            color: var(--fin-gold);
-            box-shadow: 0 0 12px var(--theme-glow);
-        }
-        .btn-briefing:hover, .btn-briefing.active {
-            background: linear-gradient(135deg, var(--fin-gold), var(--fin-amber));
-            color: #030712;
-            box-shadow: 0 0 22px var(--theme-glow);
-            transform: translateY(-2px);
-        }
-
         /* Palette Switcher Button */
         .btn-theme {
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid var(--glass-border);
             color: var(--fin-gold);
-            padding: 7px 12px;
+            padding: 8px 14px;
             border-radius: 12px;
             cursor: pointer;
-            font-size: 0.78rem;
+            font-size: 0.8rem;
             font-weight: 800;
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            transition: all 0.3s ease;
+            gap: 7px;
+            transition: all 0.25s ease;
         }
         .btn-theme:hover {
             background: rgba(255, 255, 255, 0.1);
-            transform: scale(1.03);
+            transform: translateY(-2px);
         }
 
-        /* Executive Briefing Floating Banner */
-        .briefing-floating-bar {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%) translateY(-120px);
-            z-index: 10000;
-            background: rgba(3, 7, 18, 0.94);
-            backdrop-filter: blur(20px);
-            border: 1.5px solid var(--fin-gold);
-            padding: 10px 24px;
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            box-shadow: 0 12px 40px rgba(0,0,0,0.9), 0 0 25px var(--theme-glow);
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            color: #F8FAFC;
-            font-size: 0.85rem;
-            font-weight: 800;
-        }
-        .briefing-floating-bar.show {
-            transform: translateX(-50%) translateY(0);
-        }
-        .briefing-exit-btn {
-            background: rgba(239, 68, 68, 0.2);
-            border: 1px solid rgba(239, 68, 68, 0.6);
-            color: #FCA5A5;
-            padding: 5px 14px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        .briefing-exit-btn:hover {
-            background: #EF4444;
-            color: white;
-        }
-
-        /* Briefing Mode Body Rules */
-        body.executive-briefing-mode #rebalanceSimulator,
-        body.executive-briefing-mode #hudCapsule,
-        body.executive-briefing-mode .kpi-footer,
-        body.executive-briefing-mode .btn-action {
-            display: none !important;
-        }
-        body.executive-briefing-mode .briefing-watermark {
-            display: block !important;
-        }
-        body.executive-briefing-mode .chart-box {
-            padding: 26px;
-            background: rgba(10, 16, 32, 0.95);
-            border: 1.5px solid var(--glass-border);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.92), 0 0 30px var(--theme-glow);
-        }
-        body.executive-briefing-mode .chart-box div[id^="plot"] {
-            height: 380px !important;
-        }
-
-        .briefing-watermark {
-            display: none;
-            text-align: center;
-            margin-bottom: 24px;
-            padding: 14px;
-            background: rgba(255, 215, 0, 0.08);
-            border: 1.5px dashed var(--glass-border);
-            border-radius: 14px;
-            color: var(--fin-gold);
-            font-size: 0.9rem;
-            letter-spacing: 1px;
-            font-weight: 900;
-        }
-
-        /* Glassmorphism Cards & HUD Brackets */
+        /* Glassmorphism Cards & HUD Brackets (Fast & Smooth Physics) */
         .glass-card {
             background: var(--bg-card);
             backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
             border-radius: 20px;
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.65);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65);
             position: relative;
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease, box-shadow 0.4s ease;
+            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, box-shadow 0.25s ease;
             overflow: hidden;
             will-change: transform, box-shadow;
             transform: translateZ(0);
         }
         .glass-card:hover {
             border-color: var(--glass-border-focus);
-            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.8), 0 0 20px var(--theme-glow);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8), 0 0 20px var(--theme-glow);
         }
 
         /* 4-Corner HUD Tech Brackets */
@@ -369,7 +284,7 @@
             height: 12px;
             border-color: var(--fin-gold);
             pointer-events: none;
-            transition: all 0.35s ease;
+            transition: all 0.25s ease;
         }
         .hud-bracket::before {
             top: 6px;
@@ -395,22 +310,23 @@
             perspective: 1200px;
         }
 
-        /* Scroll Reveal Transitions */
+        /* Snappy & Silky Fast Scroll Reveal (0.3s) */
         .scroll-reveal {
             opacity: 0;
-            transform: translateY(35px) scale(0.98);
-            transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateY(18px) scale(0.99);
+            transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
         }
         .scroll-reveal.revealed {
             opacity: 1;
             transform: translateY(0) scale(1);
         }
 
-        /* Stagger Delays */
-        .delay-1 { transition-delay: 0.08s; }
-        .delay-2 { transition-delay: 0.16s; }
-        .delay-3 { transition-delay: 0.24s; }
-        .delay-4 { transition-delay: 0.32s; }
+        /* Fast Micro Stagger Delays */
+        .delay-1 { transition-delay: 0.03s; }
+        .delay-2 { transition-delay: 0.06s; }
+        .delay-3 { transition-delay: 0.09s; }
+        .delay-4 { transition-delay: 0.12s; }
 
         /* KPI Grid Layout */
         .kpi-grid {
@@ -426,21 +342,21 @@
             gap: 8px;
         }
         .kpi-title {
-            font-size: 0.84rem;
+            font-size: 0.88rem;
             color: var(--text-dim);
-            font-weight: 600;
+            font-weight: 700;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
         .kpi-number {
-            font-size: 2.15rem;
+            font-size: 2.2rem;
             font-weight: 900;
             font-family: 'JetBrains Mono', monospace;
             letter-spacing: -0.5px;
         }
         .kpi-footer {
-            font-size: 0.75rem;
+            font-size: 0.78rem;
             font-family: 'JetBrains Mono', monospace;
             display: flex;
             align-items: center;
@@ -455,7 +371,7 @@
             color: #F87171;
             padding: 4px 12px;
             border-radius: 20px;
-            font-size: 0.75rem;
+            font-size: 0.78rem;
             font-weight: 800;
             display: inline-flex;
             align-items: center;
@@ -470,7 +386,7 @@
             margin-bottom: 28px;
         }
         .chart-box {
-            padding: 22px;
+            padding: 24px;
             display: flex;
             flex-direction: column;
             gap: 14px;
@@ -483,7 +399,7 @@
             gap: 10px;
         }
         .chart-head h3 {
-            font-size: 1.02rem;
+            font-size: 1.05rem;
             font-weight: 800;
             display: flex;
             align-items: center;
@@ -504,19 +420,19 @@
         .slider-label-row {
             display: flex;
             justify-content: space-between;
-            font-size: 0.85rem;
+            font-size: 0.88rem;
             font-weight: 700;
         }
         input[type=range] {
             -webkit-appearance: none;
             width: 100%;
             height: 7px;
-            background: rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.12);
             border-radius: 5px;
             outline: none;
             accent-color: var(--fin-gold);
             cursor: pointer;
-            transition: background 0.3s ease;
+            transition: background 0.2s ease;
         }
         .sim-result-box {
             background: rgba(255, 215, 0, 0.06);
@@ -538,18 +454,18 @@
             align-items: center;
             gap: 8px;
             box-shadow: 0 0 20px var(--theme-glow);
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .btn-simulate:hover {
             filter: brightness(1.15);
-            transform: scale(1.02);
-            box-shadow: 0 0 30px var(--theme-glow);
+            transform: translateY(-2px);
+            box-shadow: 0 0 28px var(--theme-glow);
         }
 
         @media (max-width: 768px) {
             .charts-row-2 { grid-template-columns: 1fr; }
             .sim-grid { grid-template-columns: 1fr; }
-            .kpi-number { font-size: 1.8rem; }
+            .kpi-number { font-size: 1.85rem; }
         }
     </style>
 </head>
@@ -560,23 +476,17 @@
     <!-- Ambient 3D Cyber Particles Canvas -->
     <canvas id="holoCanvas"></canvas>
 
-    <!-- Minimalist Status Capsule / Back to Top (No "عمق المتصفح") -->
+    <!-- Minimalist Back to Top Capsule -->
     <div id="hudCapsule" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="انقر للصعود لأعلى الصفحة">
         <div class="radar-dot"></div>
-        <span id="hudStatusText">المحفظة السيادية • بث لحظي 2026</span>
+        <span>المحفظة السيادية • بث لحظي 2026</span>
         <span style="font-size: 0.8rem; opacity: 0.8;">▲</span>
-    </div>
-
-    <!-- Executive Briefing Mode Floating Bar -->
-    <div id="briefingFloatingBar" class="briefing-floating-bar">
-        <span>💼 وضع الاجتماعات الرسمية نشط (Executive Briefing Mode)</span>
-        <button class="briefing-exit-btn" onclick="toggleExecutiveBriefing()">✕ الخروج [ESC]</button>
     </div>
 
     <!-- HUD Header -->
     <header class="hud-topbar">
         <div style="display: flex; align-items: center; gap: 14px;">
-            <div style="width: 44px; height: 44px; border-radius: 14px; background: linear-gradient(135deg, var(--fin-gold), var(--fin-amber)); display: flex; align-items: center; justify-content: center; font-size: 1.35rem; box-shadow: 0 0 16px var(--theme-glow); transition: all 0.4s ease;">
+            <div style="width: 44px; height: 44px; border-radius: 14px; background: linear-gradient(135deg, var(--fin-gold), var(--fin-amber)); display: flex; align-items: center; justify-content: center; font-size: 1.35rem; box-shadow: 0 0 16px var(--theme-glow); transition: all 0.3s ease;">
                 🏛️
             </div>
             <div>
@@ -603,34 +513,23 @@
                 <span>تقرير A4 التنفيذي</span>
             </a>
 
-            <!-- Executive Briefing Mode -->
-            <button class="btn-action btn-briefing" id="briefingToggleBtn" onclick="toggleExecutiveBriefing()" title="وضع الاجتماعات الرسمية لكبار المستثمرين">
-                <span>💼</span>
-                <span>وضع الاجتماعات</span>
-            </button>
-
             <!-- Sound feedback -->
             <button class="btn-action" id="audioToggleBtn" onclick="toggleSound()">
                 <span id="audioIcon">🔊</span>
-                <span id="audioLabel">Glass Sonic</span>
+                <span id="audioLabel">الصوت</span>
             </button>
         </div>
     </header>
 
     <!-- Main Content Container -->
-    <main style="max-width: 1280px; margin: 0 auto; padding: 28px 18px; position: relative; z-index: 10;">
-
-        <!-- Executive Briefing Watermark -->
-        <div class="briefing-watermark">
-            🏛️ العرض السيادي المعتمد • اجتماع مجلس الإدارة ولجنة الاستثمار العليا 2026 • سري وتنفيذي
-        </div>
+    <main style="max-width: 1280px; margin: 0 auto; padding: 24px 18px; position: relative; z-index: 10;">
 
         <!-- Executive Portfolio Banner with Inflation Delta Guard -->
-        <div class="glass-card hud-bracket scroll-reveal interactive-tilt" style="padding: 28px; border-right: 4.5px solid var(--fin-gold); margin-bottom: 28px;">
+        <div class="glass-card hud-bracket scroll-reveal interactive-tilt revealed" style="padding: 28px; border-right: 4.5px solid var(--fin-gold); margin-bottom: 28px;">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
                 <div>
                     <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                        <span style="font-size: 0.78rem; color: var(--fin-gold); font-family: 'JetBrains Mono'; font-weight: 800; text-transform: uppercase;">
+                        <span style="font-size: 0.8rem; color: var(--fin-gold); font-family: 'JetBrains Mono'; font-weight: 800; text-transform: uppercase;">
                             🏛️ محفظة الأصول المعتمدة لسنة 2026
                         </span>
                         <!-- Inflation Delta Guard Badge -->
@@ -642,14 +541,14 @@
                     <h2 style="font-size: 1.85rem; font-weight: 900; margin-top: 6px;">
                         إجمالي الأصول المدارة: <span style="color: var(--fin-gold); font-family: 'JetBrains Mono';">185.40</span> مليون جنيه مصري
                     </h2>
-                    <p style="font-size: 0.88rem; color: var(--text-dim); margin-top: 6px; max-width: 760px;">
-                        العائد السنوي الموزون للمحفظة <strong style="color: #10B981; font-family: 'JetBrains Mono';">+24.8%</strong> مع تركيز سيادي في أذون الخزانة المصرية (27.25% خالي من المخاطر) ومحفظة سبائك الذهب الفعلي المتحوط للتضخم. القوة الشرائية مضمونة بالكامل ضد تذبذبات الصرف.
+                    <p style="font-size: 0.9rem; color: var(--text-dim); margin-top: 6px; max-width: 760px; line-height: 1.6;">
+                        العائد السنوي الموزون للمحفظة <strong style="color: #10B981; font-family: 'JetBrains Mono';">+24.8%</strong> مع تركيز سيادي في أذون الخزانة المصرية (27.25% عائد خالي من المخاطر) ومحفظة سبائك الذهب الفعلي المتحوط للتضخم. القوة الشرائية محصنة بالكامل.
                     </p>
                 </div>
                 <div style="display: flex; gap: 12px; align-items: center;">
                     <div style="text-align: right; border-right: 2px solid var(--glass-border); padding-right: 14px;">
                         <span style="font-size: 0.72rem; color: var(--text-dim);">الحماية التضخمية</span>
-                        <div style="font-size: 1.1rem; font-weight: 900; color: #10B981; font-family: 'JetBrains Mono';">محفظة محصنة 100%</div>
+                        <div style="font-size: 1.15rem; font-weight: 900; color: #10B981; font-family: 'JetBrains Mono';">محفظة محصنة 100%</div>
                     </div>
                 </div>
             </div>
@@ -657,95 +556,95 @@
 
         <!-- Key Financial Telemetry Cards -->
         <div class="kpi-grid">
-            <div class="glass-card kpi-item hud-bracket scroll-reveal interactive-tilt delay-1" style="border-right: 3.5px solid #FFD700;">
+            <div class="glass-card kpi-item hud-bracket scroll-reveal interactive-tilt delay-1 revealed" style="border-right: 3.5px solid #FFD700;">
                 <div class="kpi-title">
                     <span>أذون الخزانة المصرية (T-Bills 1Y)</span>
                     <span>🏛️</span>
                 </div>
                 <div class="kpi-number" style="color: #FFD700;" id="kpi-tbills">75.0 <span style="font-size: 0.95rem; color: var(--text-dim);">مليون ج.م</span></div>
                 <div class="kpi-footer">
-                    <span style="color: #10B981;">+27.25% عائد صافي</span>
+                    <span style="color: #10B981; font-weight: 700;">+27.25% عائد صافي</span>
                     <span style="color: var(--text-dim);">ضمان البنك المركزي</span>
                 </div>
             </div>
 
-            <div class="glass-card kpi-item hud-bracket scroll-reveal interactive-tilt delay-2" style="border-right: 3.5px solid #F59E0B;">
+            <div class="glass-card kpi-item hud-bracket scroll-reveal interactive-tilt delay-2 revealed" style="border-right: 3.5px solid #F59E0B;">
                 <div class="kpi-title">
                     <span>سبائك الذهب الفعلي (24K Bullion)</span>
                     <span>🪙</span>
                 </div>
                 <div class="kpi-number" style="color: #F59E0B;" id="kpi-gold">42.5 <span style="font-size: 0.95rem; color: var(--text-dim);">مليون ج.م</span></div>
                 <div class="kpi-footer">
-                    <span style="color: #10B981;">+38.60% نمو سنوي</span>
+                    <span style="color: #10B981; font-weight: 700;">+38.60% نمو سنوي</span>
                     <span style="color: var(--text-dim);">تحوط ضد انخفاض العملة</span>
                 </div>
             </div>
 
-            <div class="glass-card kpi-item hud-bracket scroll-reveal interactive-tilt delay-3" style="border-right: 3.5px solid #00F0FF;">
+            <div class="glass-card kpi-item hud-bracket scroll-reveal interactive-tilt delay-3 revealed" style="border-right: 3.5px solid #00F0FF;">
                 <div class="kpi-title">
                     <span>أسهم البورصة القيادية (EGX30)</span>
                     <span>📈</span>
                 </div>
                 <div class="kpi-number" style="color: #00F0FF;" id="kpi-equity">38.2 <span style="font-size: 0.95rem; color: var(--text-dim);">مليون ج.م</span></div>
                 <div class="kpi-footer">
-                    <span style="color: #10B981;">+29.40% عائد الأرباح</span>
+                    <span style="color: #10B981; font-weight: 700;">+29.40% عائد الأرباح</span>
                     <span style="color: var(--text-dim);">CIB، إي فاينانس، السويدي</span>
                 </div>
             </div>
 
-            <div class="glass-card kpi-item hud-bracket scroll-reveal interactive-tilt delay-4" style="border-right: 3.5px solid #10B981;">
+            <div class="glass-card kpi-item hud-bracket scroll-reveal interactive-tilt delay-4 revealed" style="border-right: 3.5px solid #10B981;">
                 <div class="kpi-title">
                     <span>أصول عقارية وصكوك إيجارية</span>
                     <span>🏢</span>
                 </div>
                 <div class="kpi-number" style="color: #10B981;" id="kpi-realestate">29.7 <span style="font-size: 0.95rem; color: var(--text-dim);">مليون ج.م</span></div>
                 <div class="kpi-footer">
-                    <span style="color: #10B981;">+14.80% عائد دوري</span>
+                    <span style="color: #10B981; font-weight: 700;">+14.80% عائد دوري</span>
                     <span style="color: var(--text-dim);">التجمع والشيخ زايد</span>
                 </div>
             </div>
         </div>
 
-        <!-- Charts Row 1: Capital Growth Horizon with Inflation Benchmark & Asset Allocation Donut -->
+        <!-- Charts Row 1: Capital Growth Horizon with High-Legibility Labels & Asset Allocation Donut -->
         <div class="charts-row-2">
-            <div class="glass-card chart-box hud-bracket scroll-reveal interactive-tilt delay-1">
+            <div class="glass-card chart-box hud-bracket scroll-reveal interactive-tilt delay-1 revealed">
                 <div class="chart-head">
                     <h3><span>📈</span> توقعات تراكم نمو رأس المال لـ 5 سنوات ومقارنة التضخم</h3>
                     <span class="hud-badge">Plotly Spline + CPI Guard</span>
                 </div>
-                <div id="plotGrowth" style="width: 100%; height: 320px;"></div>
+                <div id="plotGrowth" style="width: 100%; height: 350px;"></div>
             </div>
 
-            <div class="glass-card chart-box hud-bracket scroll-reveal interactive-tilt delay-2">
+            <div class="glass-card chart-box hud-bracket scroll-reveal interactive-tilt delay-2 revealed">
                 <div class="chart-head">
                     <h3><span>🪙</span> توزيع الأصول الرأسمالية ونسب المحفظة</h3>
                     <span class="hud-badge">Plotly 3D Donut</span>
                 </div>
-                <div id="plotDonut" style="width: 100%; height: 320px;"></div>
+                <div id="plotDonut" style="width: 100%; height: 350px;"></div>
             </div>
         </div>
 
         <!-- Charts Row 2: Yield Curve Ladder & Risk-Return Scatter Matrix -->
         <div class="charts-row-2">
-            <div class="glass-card chart-box hud-bracket scroll-reveal interactive-tilt delay-1">
+            <div class="glass-card chart-box hud-bracket scroll-reveal interactive-tilt delay-1 revealed">
                 <div class="chart-head">
                     <h3><span>🏛️</span> منحنى عوائد أذون الخزانة المصرية حسب فترات الاستحقاق</h3>
                     <span class="hud-badge">T-Bills Curve</span>
                 </div>
-                <div id="plotYieldLadder" style="width: 100%; height: 320px;"></div>
+                <div id="plotYieldLadder" style="width: 100%; height: 350px;"></div>
             </div>
 
-            <div class="glass-card chart-box hud-bracket scroll-reveal interactive-tilt delay-2">
+            <div class="glass-card chart-box hud-bracket scroll-reveal interactive-tilt delay-2 revealed">
                 <div class="chart-head">
                     <h3><span>⚖️</span> مصفوفة العائد المحقق مقابل معامل المخاطرة والتذبذب</h3>
                     <span class="hud-badge">Alpha vs Risk</span>
                 </div>
-                <div id="plotRiskMatrix" style="width: 100%; height: 320px;"></div>
+                <div id="plotRiskMatrix" style="width: 100%; height: 350px;"></div>
             </div>
         </div>
 
         <!-- What-If Asset Rebalancing Simulator -->
-        <div class="glass-card hud-bracket scroll-reveal interactive-tilt" id="rebalanceSimulator" style="padding: 28px; margin-bottom: 28px; border-left: 4px solid var(--fin-cyan);">
+        <div class="glass-card hud-bracket scroll-reveal interactive-tilt revealed" id="rebalanceSimulator" style="padding: 28px; margin-bottom: 28px; border-left: 4px solid var(--fin-cyan);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
                 <h3 style="font-size: 1.25rem; font-weight: 900; display: flex; align-items: center; gap: 10px;">
                     <span>🎛️</span>
@@ -780,17 +679,17 @@
                         <input type="range" id="rngEquity" min="5" max="40" value="20" step="5" oninput="recalculatePortfolio()">
                     </div>
 
-                    <div style="font-size: 0.8rem; color: var(--text-dim); padding: 8px 14px; background: rgba(255,255,255,0.03); border-radius: 10px;">
+                    <div style="font-size: 0.85rem; color: var(--text-dim); padding: 9px 14px; background: rgba(255,255,255,0.03); border-radius: 10px;">
                         المتبقي التلقائي للأصول العقارية والصكوك: <strong id="lblRealEstateRemaining" style="color: #10B981; font-family: 'JetBrains Mono';">15%</strong>
                     </div>
                 </div>
 
                 <div class="sim-result-box" style="display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 14px;">
-                    <span style="font-size: 0.82rem; color: var(--text-dim); font-weight: 700;">العائد السنوي الموزون المتوقع:</span>
+                    <span style="font-size: 0.85rem; color: var(--text-dim); font-weight: 700;">العائد السنوي الموزون المتوقع:</span>
                     <div id="resYield" style="font-size: 2.8rem; font-weight: 900; color: #10B981; font-family: 'JetBrains Mono'; text-shadow: 0 0 20px rgba(16, 185, 129, 0.5);">
                         +26.15%
                     </div>
-                    <div style="display: flex; gap: 20px; font-size: 0.82rem;">
+                    <div style="display: flex; gap: 20px; font-size: 0.85rem;">
                         <div>
                             <span style="color: var(--text-dim);">التدفق السنوي:</span>
                             <strong id="resAnnual" style="color: var(--fin-gold); font-family: 'JetBrains Mono';">48.48 M EGP</strong>
@@ -808,7 +707,7 @@
         </div>
 
         <!-- Institutional Footer -->
-        <footer style="text-align: center; padding: 24px 0 10px 0; color: var(--text-dim); font-size: 0.78rem;">
+        <footer style="text-align: center; padding: 24px 0 10px 0; color: var(--text-dim); font-size: 0.8rem;">
             <p>منصة إدارة الأصول السيادية والتكنولوجيا المالية • إصدار المؤسسات 2026</p>
             <p style="margin-top: 4px; font-family: 'JetBrains Mono';">تم التطوير والاعتماد بواسطة المهندس <strong>محمود حافظ</strong> (@mth1346686)</p>
         </footer>
@@ -851,11 +750,11 @@
             const label = document.getElementById('audioLabel');
             if (isAudioEnabled) {
                 icon.innerText = '🔊';
-                label.innerText = 'Glass Sonic';
-                playChime(987, 0.1);
+                label.innerText = 'الصوت';
+                playChime(987, 0.08);
             } else {
                 icon.innerText = '🔇';
-                label.innerText = 'Muted';
+                label.innerText = 'صامت';
             }
         }
 
@@ -873,44 +772,10 @@
             document.body.className = t.className;
             document.getElementById('themeIcon').innerText = t.icon;
             document.getElementById('themeName').innerText = t.name;
-            playChime(1175, 0.1);
+            playChime(1175, 0.08);
         }
 
-        // Executive Briefing Mode Controller
-        let briefingActive = false;
-        function toggleExecutiveBriefing() {
-            briefingActive = !briefingActive;
-            const body = document.body;
-            const bar = document.getElementById('briefingFloatingBar');
-            const btn = document.getElementById('briefingToggleBtn');
-            
-            if (briefingActive) {
-                body.classList.add('executive-briefing-mode');
-                bar.classList.add('show');
-                if (btn) btn.classList.add('active');
-                playChime(1046, 0.15);
-            } else {
-                body.classList.remove('executive-briefing-mode');
-                bar.classList.remove('show');
-                if (btn) btn.classList.remove('active');
-                playChime(523, 0.1);
-            }
-            setTimeout(() => {
-                ['plotGrowth', 'plotDonut', 'plotYieldLadder', 'plotRiskMatrix'].forEach(id => {
-                    const el = document.getElementById(id);
-                    if (el && window.Plotly) Plotly.Plots.resize(el);
-                });
-            }, 300);
-        }
-
-        // Close Briefing on ESC Key
-        window.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && briefingActive) {
-                toggleExecutiveBriefing();
-            }
-        });
-
-        // Ambient Cyber Dust Particle Canvas (Silky 60FPS Fluid Physics)
+        // Ambient Cyber Dust Particle Canvas (Lightweight & 60FPS)
         function initHoloParticles() {
             const canvas = document.getElementById('holoCanvas');
             const ctx = canvas.getContext('2d');
@@ -920,17 +785,17 @@
                 h = canvas.height = window.innerHeight;
             }
             resize();
-            window.addEventListener('resize', resize);
+            window.addEventListener('resize', resize, { passive: true });
 
             const particles = [];
-            const count = Math.min(45, Math.floor(window.innerWidth / 28));
+            const count = Math.min(28, Math.floor(window.innerWidth / 40));
             for (let i = 0; i < count; i++) {
                 particles.push({
                     x: Math.random() * w,
                     y: Math.random() * h,
-                    vx: (Math.random() - 0.5) * 0.35,
-                    vy: -Math.random() * 0.45 - 0.15,
-                    size: Math.random() * 2.0 + 0.8,
+                    vx: (Math.random() - 0.5) * 0.3,
+                    vy: -Math.random() * 0.4 - 0.1,
+                    size: Math.random() * 1.8 + 0.8,
                     color: Math.random() > 0.5 ? 'rgba(255, 215, 0,' : 'rgba(0, 240, 255,'
                 });
             }
@@ -946,7 +811,7 @@
 
                     ctx.beginPath();
                     ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                    ctx.fillStyle = p.color + '0.45)';
+                    ctx.fillStyle = p.color + '0.4)';
                     ctx.fill();
                 });
                 requestAnimationFrame(animate);
@@ -954,7 +819,7 @@
             animate();
         }
 
-        // Scroll Progress (Smooth Hardware Accelerated)
+        // Scroll Progress (Hardware Accelerated)
         function handleScroll() {
             const scrollTop = window.scrollY || document.documentElement.scrollTop;
             const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
@@ -962,7 +827,7 @@
             document.getElementById('laserProgress').style.width = pct + '%';
         }
 
-        // 3D Perspective Tilt on Hover with Damped Return Physics
+        // 3D Perspective Tilt on Hover with Snappy Damped Return
         function initTilt() {
             document.querySelectorAll('.interactive-tilt').forEach(card => {
                 let rect = null;
@@ -973,9 +838,9 @@
                     if (!rect) rect = card.getBoundingClientRect();
                     const x = e.clientX - rect.left - rect.width / 2;
                     const y = e.clientY - rect.top - rect.height / 2;
-                    const rotX = -(y / (rect.height / 2)) * 3.0;
-                    const rotY = (x / (rect.width / 2)) * 3.0;
-                    card.style.transform = `perspective(1200px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateY(-3px)`;
+                    const rotX = -(y / (rect.height / 2)) * 2.8;
+                    const rotY = (x / (rect.width / 2)) * 2.8;
+                    card.style.transform = `perspective(1200px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateY(-2px)`;
                 });
                 card.addEventListener('mouseleave', () => {
                     card.style.transform = 'perspective(1200px) rotateX(0deg) rotateY(0deg) translateY(0)';
@@ -983,11 +848,11 @@
             });
         }
 
-        // Numerical CountUp Telemetry
+        // Fast & Energetic CountUp Telemetry (600ms)
         function countUp(el, target, decimals = 1, prefix = '', suffix = '') {
             let start = 0;
-            const duration = 1200;
-            const stepTime = 20;
+            const duration = 600;
+            const stepTime = 16;
             const totalSteps = duration / stepTime;
             const inc = (target - start) / totalSteps;
 
@@ -1001,7 +866,7 @@
             }, stepTime);
         }
 
-        // IntersectionObserver for Silky Scroll Reveal & Telemetry
+        // Snappy Scroll Reveal & Telemetry Initialization
         function initObserver() {
             const obs = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
@@ -1018,7 +883,7 @@
                         obs.unobserve(entry.target);
                     }
                 });
-            }, { threshold: 0.12 });
+            }, { threshold: 0.05, rootMargin: '40px' });
 
             document.querySelectorAll('.scroll-reveal').forEach(el => obs.observe(el));
         }
@@ -1034,7 +899,7 @@
             });
         }
 
-        // Render Plotly Visualizations (100% Locked - Zero Zooming / Scaling / Selection)
+        // Render Plotly Visualizations (Ultra-Crisp Legible Labels, Fixed Range, Zero Zoom)
         function renderPlots() {
             const chartConfig = {
                 responsive: true,
@@ -1046,119 +911,156 @@
                 staticPlot: false
             };
 
-            // 1. Capital Growth Spline with Inflation Delta Benchmark
+            // 1. Capital Growth Spline with High-Contrast Legible Labels
             Plotly.newPlot('plotGrowth', [
                 {
                     x: ['2026', '2027', '2028', '2029', '2030'],
                     y: [75.0, 95.4, 121.4, 154.5, 196.6],
                     name: 'أذون الخزانة المصرية (27.25%)',
-                    line: { color: '#FFD700', width: 3.5, shape: 'spline' },
+                    line: { color: '#FFD700', width: 3.8, shape: 'spline' },
                     mode: 'lines+markers',
-                    marker: { size: 8, color: '#FFD700' }
+                    marker: { size: 9, color: '#FFD700' }
                 },
                 {
                     x: ['2026', '2027', '2028', '2029', '2030'],
                     y: [42.5, 58.9, 81.6, 113.1, 156.8],
                     name: 'سبائك الذهب الفعلي (38.6%)',
-                    line: { color: '#F59E0B', width: 3.5, dash: 'dot', shape: 'spline' },
+                    line: { color: '#F59E0B', width: 3.8, dash: 'dot', shape: 'spline' },
                     mode: 'lines+markers',
-                    marker: { size: 8, color: '#F59E0B' }
+                    marker: { size: 9, color: '#F59E0B' }
                 },
                 {
                     x: ['2026', '2027', '2028', '2029', '2030'],
                     y: [38.2, 49.4, 63.9, 82.7, 107.0],
                     name: 'أسهم البورصة EGX30 (29.4%)',
-                    line: { color: '#00F0FF', width: 3.5, shape: 'spline' },
+                    line: { color: '#00F0FF', width: 3.8, shape: 'spline' },
                     mode: 'lines+markers',
-                    marker: { size: 8, color: '#00F0FF' }
+                    marker: { size: 9, color: '#00F0FF' }
                 },
                 {
                     x: ['2026', '2027', '2028', '2029', '2030'],
                     y: [75.0, 93.3, 116.0, 144.3, 179.6],
-                    name: 'معدل التضخم السنوي (24.4% CBE Benchmark)',
-                    line: { color: '#EF4444', width: 2.2, dash: 'dash' },
+                    name: 'معدل التضخم السنوي (24.4% CBE)',
+                    line: { color: '#EF4444', width: 2.5, dash: 'dash' },
                     mode: 'lines',
-                    opacity: 0.85
+                    opacity: 0.9
                 }
             ], {
                 paper_bgcolor: 'rgba(0,0,0,0)',
                 plot_bgcolor: 'rgba(0,0,0,0)',
-                font: { color: '#F8FAFC', family: 'Cairo' },
-                margin: { l: 30, r: 20, t: 30, b: 35 },
-                legend: { orientation: 'h', y: 1.15, x: 0.5, xanchor: 'center' },
+                font: { color: '#F8FAFC', family: 'Cairo', size: 13, weight: 700 },
+                margin: { l: 45, r: 25, t: 35, b: 45 },
+                legend: { orientation: 'h', y: 1.18, x: 0.5, xanchor: 'center', font: { size: 12.5, color: '#F8FAFC' } },
                 dragmode: false,
-                xaxis: { showgrid: false, fixedrange: true },
-                yaxis: { showgrid: true, gridcolor: 'rgba(255,255,255,0.06)', fixedrange: true }
+                xaxis: { 
+                    showgrid: false, 
+                    fixedrange: true,
+                    tickfont: { color: '#F8FAFC', size: 13, family: 'Cairo', weight: 800 }
+                },
+                yaxis: { 
+                    showgrid: true, 
+                    gridcolor: 'rgba(255,255,255,0.08)', 
+                    fixedrange: true,
+                    tickfont: { color: '#CBD5E1', size: 12.5, family: 'Cairo', weight: 700 }
+                }
             }, chartConfig);
 
-            // 2. Asset Allocation 3D Donut
+            // 2. Asset Allocation 3D Donut (Large Visible Labels & Clear Slices)
             Plotly.newPlot('plotDonut', [{
                 values: [75.0, 42.5, 38.2, 29.7],
                 labels: ['أذون خزانة حكومية', 'سبائك ذهب عيار 24', 'أسهم قيادية EGX30', 'أصول عقارية وصكوك'],
                 type: 'pie',
-                hole: 0.62,
+                hole: 0.58,
                 marker: { 
                     colors: ['#FFD700', '#F59E0B', '#00F0FF', '#10B981'],
-                    line: { color: '#030712', width: 2.5 }
+                    line: { color: '#030712', width: 2.8 }
                 },
-                textinfo: 'percent+label',
+                textinfo: 'label+percent',
+                textposition: 'inside',
+                insidetextfont: { color: '#FFFFFF', size: 13, family: 'Cairo', weight: 800 },
                 hoverinfo: 'label+value+percent'
             }], {
                 paper_bgcolor: 'rgba(0,0,0,0)',
                 plot_bgcolor: 'rgba(0,0,0,0)',
-                font: { color: '#F8FAFC', family: 'Cairo' },
-                showlegend: false,
+                font: { color: '#F8FAFC', family: 'Cairo', size: 13 },
+                showlegend: true,
+                legend: { orientation: 'h', y: -0.12, font: { color: '#F8FAFC', size: 12 } },
                 dragmode: false,
-                margin: { l: 15, r: 15, t: 15, b: 15 }
+                margin: { l: 20, r: 20, t: 20, b: 40 }
             }, chartConfig);
 
-            // 3. T-Bills Yield Ladder
+            // 3. T-Bills Yield Ladder (High-Contrast Bold Outside Percentages)
             Plotly.newPlot('plotYieldLadder', [{
                 x: ['3 شهور (91 يوم)', '6 شهور (182 يوم)', '9 شهور (273 يوم)', 'سنة كاملة (364 يوم)'],
                 y: [28.50, 27.90, 27.45, 27.25],
                 type: 'bar',
                 marker: {
                     color: ['#00F0FF', '#10B981', '#A855F7', '#FFD700'],
-                    line: { color: '#FFFFFF', width: 1 }
+                    line: { color: '#FFFFFF', width: 1.5 }
                 },
                 text: ['28.50%', '27.90%', '27.45%', '27.25%'],
-                textposition: 'outside'
+                textposition: 'outside',
+                textfont: { color: '#FFD700', size: 14, family: 'Cairo', weight: 900 }
             }], {
                 paper_bgcolor: 'rgba(0,0,0,0)',
                 plot_bgcolor: 'rgba(0,0,0,0)',
-                font: { color: '#F8FAFC', family: 'Cairo' },
-                margin: { l: 30, r: 20, t: 30, b: 40 },
+                font: { color: '#F8FAFC', family: 'Cairo', size: 13 },
+                margin: { l: 40, r: 25, t: 35, b: 45 },
                 dragmode: false,
-                xaxis: { showgrid: false, fixedrange: true },
-                yaxis: { showgrid: true, gridcolor: 'rgba(255,255,255,0.06)', range: [20, 31], fixedrange: true }
+                xaxis: { 
+                    showgrid: false, 
+                    fixedrange: true,
+                    tickfont: { color: '#F8FAFC', size: 12.5, family: 'Cairo', weight: 700 }
+                },
+                yaxis: { 
+                    showgrid: true, 
+                    gridcolor: 'rgba(255,255,255,0.08)', 
+                    range: [20, 31.8], 
+                    fixedrange: true,
+                    tickfont: { color: '#CBD5E1', size: 12, family: 'Cairo' }
+                }
             }, chartConfig);
 
-            // 4. Risk vs Return Scatter
+            // 4. Risk vs Return Scatter (Crisp Labels & Clear Padding)
             Plotly.newPlot('plotRiskMatrix', [{
                 x: [2.5, 8.5, 18.2, 11.0],
                 y: [27.25, 38.60, 29.40, 14.80],
                 mode: 'markers+text',
                 text: ['أذون الخزانة', 'سبائك الذهب', 'البورصة EGX30', 'العقارات المدرة'],
                 textposition: 'top center',
+                textfont: { color: '#FFFFFF', size: 13.5, family: 'Cairo', weight: 800 },
                 marker: {
-                    size: [28, 36, 32, 26],
+                    size: [32, 42, 38, 30],
                     color: ['#FFD700', '#F59E0B', '#00F0FF', '#10B981'],
-                    line: { color: '#FFFFFF', width: 2 }
+                    line: { color: '#FFFFFF', width: 2.2 }
                 }
             }], {
                 paper_bgcolor: 'rgba(0,0,0,0)',
                 plot_bgcolor: 'rgba(0,0,0,0)',
-                font: { color: '#F8FAFC', family: 'Cairo' },
-                margin: { l: 35, r: 20, t: 30, b: 35 },
+                font: { color: '#F8FAFC', family: 'Cairo', size: 13 },
+                margin: { l: 45, r: 25, t: 40, b: 45 },
                 dragmode: false,
-                xaxis: { title: 'مؤشر التذبذب والمخاطرة (%)', showgrid: true, gridcolor: 'rgba(255,255,255,0.06)', fixedrange: true },
-                yaxis: { title: 'العائد السنوي الصافي (%)', showgrid: true, gridcolor: 'rgba(255,255,255,0.06)', fixedrange: true }
+                xaxis: { 
+                    title: { text: 'مؤشر التذبذب والمخاطرة (%)', font: { color: '#94A3B8', size: 13, weight: 700 } },
+                    showgrid: true, 
+                    gridcolor: 'rgba(255,255,255,0.08)', 
+                    fixedrange: true,
+                    tickfont: { color: '#F8FAFC', size: 12.5 }
+                },
+                yaxis: { 
+                    title: { text: 'العائد السنوي الصافي (%)', font: { color: '#94A3B8', size: 13, weight: 700 } },
+                    showgrid: true, 
+                    gridcolor: 'rgba(255,255,255,0.08)', 
+                    range: [10, 44],
+                    fixedrange: true,
+                    tickfont: { color: '#F8FAFC', size: 12.5 }
+                }
             }, chartConfig);
 
             // Lock draglayer immediately and periodically
             lockPlotlyDragLayer();
             setTimeout(lockPlotlyDragLayer, 100);
-            setTimeout(lockPlotlyDragLayer, 500);
+            setTimeout(lockPlotlyDragLayer, 400);
         }
 
         // Rebalancing Simulator Calculation
@@ -1184,10 +1086,10 @@
         }
 
         function handleSimulateClick() {
-            playChime(1175, 0.12);
+            playChime(1175, 0.1);
             confetti({
-                particleCount: 70,
-                spread: 75,
+                particleCount: 65,
+                spread: 70,
                 origin: { y: 0.75 },
                 colors: ['#FFD700', '#F59E0B', '#10B981', '#00F0FF']
             });
