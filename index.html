@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>منصة إدارة الثروات والأصول السيادية • Sovereign Fintech Intelligence</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Plotly CDN -->
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+    <!-- Canvas Confetti CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+    <style>
+        :root {
+            --fin-gold: #FFD700;
+            --fin-gold-glow: rgba(255, 215, 0, 0.45);
+            --fin-amber: #F59E0B;
+            --fin-cyan: #00F0FF;
+            --fin-cyan-glow: rgba(0, 240, 255, 0.45);
+            --fin-emerald: #10B981;
+            --fin-emerald-glow: rgba(16, 185, 129, 0.45);
+            --fin-violet: #A855F7;
+            --fin-rose: #F43F5E;
+            --bg-deep: #030712;
+            --glass-bg: rgba(11, 19, 43, 0.75);
+            --glass-bg-hover: rgba(20, 32, 65, 0.88);
+            --glass-border: rgba(255, 215, 0, 0.25);
+            --glass-border-cyan: rgba(0, 240, 255, 0.28);
+            --text-pure: #FFFFFF;
+            --text-dim: #94A3B8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', 'JetBrains Mono', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            width: 100%;
+            min-height: 100%;
+            background-color: var(--bg-deep);
+            background-image: 
+                radial-gradient(circle at 12% 15%, rgba(255, 215, 0, 0.09) 0%, transparent 45%),
+                radial-gradient(circle at 88% 80%, rgba(16, 185, 129, 0.08) 0%, transparent 45%),
+                radial-gradient(circle at 50% 50%, rgba(0, 240, 255, 0.05) 0%, transparent 55%),
+                linear-gradient(180deg, #030712 0%, #081126 50%, #02050E 100%);
+            color: var(--text-pure);
+            overflow-x: hidden;
+            direction: rtl;
+        }
+
+        /* Holographic Ambient Canvas */
+        #holoCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.6;
+        }
+
+        /* Fixed Top Laser Progress Bar */
+        #laserProgress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3.5px;
+            width: 0%;
+            background: linear-gradient(90deg, var(--fin-gold) 0%, var(--fin-emerald) 50%, var(--fin-cyan) 100%);
+            box-shadow: 0 0 16px var(--fin-gold), 0 0 25px var(--fin-cyan);
+            z-index: 99999;
+            pointer-events: none;
+            transition: width 0.08s linear;
+        }
+
+        /* Floating Holographic Depth HUD Capsule */
+        #hudDepthCapsule {
+            position: fixed;
+            bottom: 24px;
+            left: 24px;
+            background: rgba(11, 19, 43, 0.88);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 215, 0, 0.4);
+            border-radius: 999px;
+            padding: 9px 20px;
+            font-family: 'JetBrains Mono', 'Cairo', monospace;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #FEF08A;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 999;
+            box-shadow: 0 10px 32px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 215, 0, 0.25);
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            user-select: none;
+            cursor: pointer;
+        }
+        #hudDepthCapsule:hover {
+            border-color: var(--fin-gold);
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.9), 0 0 30px rgba(255, 215, 0, 0.5);
+            transform: translateY(-2px);
+        }
+        .radar-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--fin-gold);
+            box-shadow: 0 0 10px var(--fin-gold);
+            position: relative;
+        }
+        .radar-dot::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            border: 1.5px solid var(--fin-gold);
+            animation: radarPulse 2s infinite ease-out;
+        }
+        @keyframes radarPulse {
+            0% { transform: scale(0.6); opacity: 1; }
+            100% { transform: scale(2.2); opacity: 0; }
+        }
+
+        /* 3D Holographic Scroll Reveal Animations */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(45px) scale(0.96) perspective(1000px) rotateX(6deg);
+            filter: blur(8px);
+            transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+                        filter 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+                        border-color 0.6s ease,
+                        box-shadow 0.6s ease;
+            will-change: opacity, transform, filter;
+            position: relative;
+            overflow: hidden;
+        }
+        .scroll-reveal.is-revealed {
+            opacity: 1;
+            transform: translateY(0) scale(1) perspective(1000px) rotateX(0deg);
+            filter: blur(0px);
+        }
+
+        /* Laser Light Sheen Sweep on Reveal */
+        .scroll-reveal.is-revealed::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -160%;
+            width: 75%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 215, 0, 0.03) 25%, 
+                rgba(255, 215, 0, 0.35) 50%, 
+                rgba(0, 240, 255, 0.3) 75%, 
+                transparent 100%
+            );
+            transform: skewX(-25deg);
+            pointer-events: none;
+            animation: holoLaserSheen 1.35s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
+            z-index: 10;
+        }
+        @keyframes holoLaserSheen {
+            0% { left: -160%; opacity: 0; }
+            30% { opacity: 1; }
+            100% { left: 240%; opacity: 0; }
+        }
+
+        .delay-1 { transition-delay: 0.06s; }
+        .delay-2 { transition-delay: 0.14s; }
+        .delay-3 { transition-delay: 0.22s; }
+        .delay-4 { transition-delay: 0.30s; }
+
+        /* Interactive 3D Perspective Tilt on Hover */
+        .interactive-tilt {
+            transform-style: preserve-3d;
+            transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+        }
+        .interactive-tilt:hover {
+            box-shadow: 0 16px 40px rgba(255, 215, 0, 0.2), 0 0 25px rgba(255, 215, 0, 0.3);
+            border-color: rgba(255, 215, 0, 0.6) !important;
+        }
+
+        /* Holographic Glass Panels */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            box-shadow: 0 10px 32px rgba(0, 0, 0, 0.7), inset 0 0 20px rgba(255, 215, 0, 0.04);
+            position: relative;
+        }
+
+        /* Corner HUD Brackets */
+        .hud-bracket::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 12px;
+            height: 12px;
+            border-top: 2px solid var(--fin-gold);
+            border-right: 2px solid var(--fin-gold);
+            pointer-events: none;
+        }
+        .hud-bracket::after {
+            content: '';
+            position: absolute;
+            bottom: 8px;
+            left: 8px;
+            width: 12px;
+            height: 12px;
+            border-bottom: 2px solid var(--fin-gold);
+            border-left: 2px solid var(--fin-gold);
+            pointer-events: none;
+        }
+
+        /* Header Bar */
+        .hud-topbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 28px;
+            background: rgba(11, 19, 43, 0.88);
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+            border-bottom: 1px solid rgba(255, 215, 0, 0.25);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .hud-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 14px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            background: rgba(255, 215, 0, 0.12);
+            color: var(--fin-gold);
+            border: 1px solid rgba(255, 215, 0, 0.35);
+        }
+
+        .btn-audio {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.35);
+            color: var(--fin-gold);
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+        .btn-audio:hover {
+            background: rgba(255, 215, 0, 0.25);
+            box-shadow: 0 0 12px var(--fin-gold);
+        }
+
+        /* KPI Cards Grid */
+        .kpi-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 18px;
+            margin: 28px 0;
+        }
+        .kpi-item {
+            padding: 22px;
+            position: relative;
+        }
+        .kpi-title {
+            font-size: 0.78rem;
+            color: var(--text-dim);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .kpi-number {
+            font-size: 2.1rem;
+            font-weight: 900;
+            font-family: 'JetBrains Mono', monospace;
+            margin: 4px 0;
+            letter-spacing: -0.5px;
+        }
+        .kpi-footer {
+            font-size: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            padding-top: 8px;
+        }
+
+        /* Charts Grid */
+        .charts-row-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(460px, 1fr));
+            gap: 24px;
+            margin-bottom: 28px;
+        }
+        .chart-box {
+            padding: 24px;
+            min-height: 380px;
+        }
+        .chart-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            padding-bottom: 12px;
+        }
+        .chart-head h3 {
+            font-size: 1.02rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Interactive Simulator */
+        .simulator-box {
+            padding: 32px;
+            border: 1px solid rgba(255, 215, 0, 0.45);
+            box-shadow: 0 0 35px rgba(255, 215, 0, 0.12);
+            margin-top: 36px;
+        }
+        .sim-sliders-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 22px;
+            margin: 24px 0;
+        }
+        .sim-input-card {
+            background: rgba(3, 7, 18, 0.6);
+            padding: 20px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .sim-range {
+            width: 100%;
+            height: 6px;
+            border-radius: 999px;
+            accent-color: var(--fin-gold);
+            cursor: pointer;
+            margin: 12px 0 6px 0;
+        }
+        .sim-metrics-banner {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+            background: linear-gradient(90deg, rgba(255,215,0,0.12), rgba(16,185,129,0.12), rgba(0,240,255,0.12));
+            padding: 24px;
+            border-radius: 18px;
+            border: 1px solid rgba(255,215,0,0.38);
+            text-align: center;
+            box-shadow: inset 0 0 25px rgba(255,215,0,0.08);
+        }
+
+        .btn-simulate {
+            background: linear-gradient(90deg, var(--fin-gold), var(--fin-amber));
+            color: #030712;
+            font-weight: 900;
+            border: none;
+            padding: 12px 26px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.45);
+            transition: all 0.2s ease;
+        }
+        .btn-simulate:hover {
+            filter: brightness(1.15);
+            transform: scale(1.02);
+        }
+
+        @media (max-width: 768px) {
+            .charts-row-2 { grid-template-columns: 1fr; }
+            .kpi-number { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Laser Progress Bar -->
+    <div id="laserProgress"></div>
+
+    <!-- Ambient 3D Cyber Particles Canvas -->
+    <canvas id="holoCanvas"></canvas>
+
+    <!-- Floating Depth HUD Capsule -->
+    <div id="hudDepthCapsule" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="انقر للصعود للأعلى بنعومة">
+        <div class="radar-dot"></div>
+        <span id="hudDepthText">عمق التصفح: 0% • نظرة المحفظة السيادية</span>
+        <span style="font-size: 0.8rem; opacity: 0.8;">▲</span>
+    </div>
+
+    <!-- HUD Header -->
+    <header class="hud-topbar">
+        <div style="display: flex; align-items: center; gap: 14px;">
+            <div style="width: 44px; height: 44px; border-radius: 14px; background: linear-gradient(135deg, #FFD700, #F59E0B); display: flex; align-items: center; justify-content: center; font-size: 1.35rem; box-shadow: 0 0 16px rgba(255,215,0,0.4);">
+                🏛️
+            </div>
+            <div>
+                <h1 style="font-size: 1.15rem; font-weight: 900; display: flex; align-items: center; gap: 10px;">
+                    منصة إدارة الثروات والأصول السيادية
+                    <span class="hud-badge">Holographic Intelligence</span>
+                </h1>
+                <p style="font-size: 0.72rem; color: var(--text-dim); font-family: 'JetBrains Mono', monospace;">
+                    محفظة الاستثمارات المؤسسية المصرية • القاهرة 2026
+                </p>
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 10px; align-items: center;">
+            <button class="btn-audio" id="audioToggleBtn" onclick="toggleSound()">
+                <span id="audioIcon">🔊</span>
+                <span id="audioLabel">Glass Sonic: ON</span>
+            </button>
+            <span class="hud-badge" style="background: rgba(16, 185, 129, 0.12); color: #10B981; border-color: rgba(16, 185, 129, 0.4);">
+                ● بث الأصول اللحظي
+            </span>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main style="max-width: 1280px; margin: 0 auto; padding: 28px 18px; position: relative; z-index: 10;">
+
+        <!-- Executive Portfolio Banner -->
+        <div class="glass-card hud-bracket scroll-reveal interactive-tilt" style="padding: 28px; border-right: 4.5px solid var(--fin-gold); margin-bottom: 28px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+                <div>
+                    <span style="font-size: 0.78rem; color: var(--fin-gold); font-family: 'JetBrains Mono'; font-weight: 800; text-transform: uppercase;">
+                        🏛️ محفظة الأصول المعتمدة لسنة 2026
+                    </span>
+                    <h2 style="font-size: 1.85rem; font-weight: 900; margin-top: 4px;">
+                        إجمالي الأصول المدارة: <span style="color: var(--fin-gold); font-family: 'JetBrains Mono';">185.40</span> مليون جنيه مصري
+                    </h2>
+                    <p style="font-size: 0.88rem; color: var(--text-dim); margin-top: 6px; max-w: 700px;">
+                        العائد السنوي الموزون للمحفظة <strong style="color: #10B981; font-family: 'JetBrains Mono';">+24.8%</strong> مع تركيز سيادي في أذون الخزانة المصرية (27.25% عائد خالي من المخاطر) ومحفظة سبائك الذهب الفعلي المتحوط للتضخم.
+                    </p>
+                </div>
+                <div style="padding: 14px 24px; border-radius: 16px; background: rgba(255,215,0,0.08); border: 1px solid rgba(255,215,0,0.3); text-align: center;">
+                    <span style="font-size: 0.7rem; color: var(--text-dim); font-family: 'JetBrains Mono';">مؤشر الجدارة الائتمانية</span>
+                    <p style="font-size: 1.5rem; font-weight: 900; color: #10B981; font-family: 'JetBrains Mono';">94.5 / 100 AAA</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4 Key Asset KPI Cards -->
+        <div class="kpi-container">
+            <div class="glass-card kpi-item hud-bracket scroll-reveal interactive-tilt delay-1" style="border-right: 3.5px solid #FFD700;">
+                <div class="kpi-title">
+                    <span>أذون الخزانة المصرية (1Y T-Bills)</span>
+                    <span>🏛️</span>
+                </div>
+                <div class="kpi-number" style="color: #FFD700;" id="kpi-tbills">75.0 <span style="font-size: 0.95rem; color: var(--text-dim);">مليون ج.م</span></div>
+                <div class="kpi-footer">
+                    <span style="color: #10B981;">+27.25% عائد سنوي</span>
+                    <span style="color: var(--text-dim);">ضمان المركزي</span>
+                </div>
+            </div>
+
+            <div class="glass-card kpi-item hud-bracket scroll-reveal interactive-tilt delay-2" style="border-right: 3.5px solid #F59E0B;">
+                <div class="kpi-title">
+                    <span>سبائك الذهب الفعلي (24K Gold)</span>
+                    <span>🪙</span>
+                </div>
+                <div class="kpi-number" style="color: #F59E0B;" id="kpi-gold">42.5 <span style="font-size: 0.95rem; color: var(--text-dim);">مليون ج.م</span></div>
+                <div class="kpi-footer">
+                    <span style="color: #10B981;">+38.60% ألفا تحوط</span>
+                    <span style="color: var(--text-dim);">سبائك معتمدة</span>
+                </div>
+            </div>
+
+            <div class="glass-card kpi-item hud-bracket scroll-reveal interactive-tilt delay-3" style="border-right: 3.5px solid #00F0FF;">
+                <div class="kpi-title">
+                    <span>أسهم البورصة المصرية (EGX30)</span>
+                    <span>📈</span>
+                </div>
+                <div class="kpi-number" style="color: #00F0FF;" id="kpi-equity">38.2 <span style="font-size: 0.95rem; color: var(--text-dim);">مليون ج.م</span></div>
+                <div class="kpi-footer">
+                    <span style="color: #10B981;">+29.40% نمو سنوي</span>
+                    <span style="color: var(--text-dim);">CIB، فوري، TMG</span>
+                </div>
+            </div>
+
+            <div class="glass-card kpi-item hud-bracket scroll-reveal interactive-tilt delay-4" style="border-right: 3.5px solid #10B981;">
+                <div class="kpi-title">
+                    <span>أصول عقارية وصكوك إيجارية</span>
+                    <span>🏢</span>
+                </div>
+                <div class="kpi-number" style="color: #10B981;" id="kpi-realestate">29.7 <span style="font-size: 0.95rem; color: var(--text-dim);">مليون ج.م</span></div>
+                <div class="kpi-footer">
+                    <span style="color: #10B981;">+14.80% عائد دوري</span>
+                    <span style="color: var(--text-dim);">التجمع والشيخ زايد</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row 1: Capital Growth Horizon & Asset Allocation Donut -->
+        <div class="charts-row-2">
+            <div class="glass-card chart-box hud-bracket scroll-reveal interactive-tilt delay-1">
+                <div class="chart-head">
+                    <h3><span>📈</span> توقعات تراكم نمو رأس المال لـ 5 سنوات (2026–2030)</h3>
+                    <span class="hud-badge">Plotly Spline</span>
+                </div>
+                <div id="plotGrowth" style="width: 100%; height: 310px;"></div>
+            </div>
+
+            <div class="glass-card chart-box hud-bracket scroll-reveal interactive-tilt delay-2">
+                <div class="chart-head">
+                    <h3><span>🪙</span> توزيع الأصول الرأسمالية ونسب المحفظة</h3>
+                    <span class="hud-badge">Plotly 3D Donut</span>
+                </div>
+                <div id="plotDonut" style="width: 100%; height: 310px;"></div>
+            </div>
+        </div>
+
+        <!-- Charts Row 2: Yield Curve Ladder & Risk-Return Scatter Matrix -->
+        <div class="charts-row-2">
+            <div class="glass-card chart-box hud-bracket scroll-reveal interactive-tilt delay-1">
+                <div class="chart-head">
+                    <h3><span>🏛️</span> منحنى عوائد أذون الخزانة المصرية حسب فترات الاستحقاق</h3>
+                    <span class="hud-badge">T-Bills Curve</span>
+                </div>
+                <div id="plotYieldLadder" style="width: 100%; height: 310px;"></div>
+            </div>
+
+            <div class="glass-card chart-box hud-bracket scroll-reveal interactive-tilt delay-2">
+                <div class="chart-head">
+                    <h3><span>⚖️</span> مصفوفة المخاطر مقابل العائد (Risk-Return Matrix)</h3>
+                    <span class="hud-badge">Scatter Alpha</span>
+                </div>
+                <div id="plotRiskMatrix" style="width: 100%; height: 310px;"></div>
+            </div>
+        </div>
+
+        <!-- Interactive Portfolio Rebalancing Simulator -->
+        <div class="glass-card simulator-box hud-bracket scroll-reveal interactive-tilt delay-2">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 18px;">
+                <div>
+                    <h2 style="font-size: 1.35rem; font-weight: 900; color: #FFFFFF;">
+                        🎛️ محاكي إعادة توزيع المحفظة الاستثمارية بالجنيه المصري
+                    </h2>
+                    <p style="font-size: 0.82rem; color: var(--text-dim); margin-top: 4px;">
+                        عدل نسب تخصيص الأصول لمشاهدة الانعكاس الفوري على العائد السنوي والتدفق النقدي الشهري.
+                    </p>
+                </div>
+                <button class="btn-simulate" onclick="handleSimulateClick()">
+                    <span>✨</span> تطبيق التوزيع وإطلاق المحاكاة
+                </button>
+            </div>
+
+            <div class="sim-sliders-grid">
+                <div class="sim-input-card">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700;">
+                        <span>أذون الخزانة المصرية (27.25%)</span>
+                        <span id="lblTbills" style="color: var(--fin-gold); font-family: 'JetBrains Mono'; font-weight: 900;">40%</span>
+                    </div>
+                    <input type="range" id="rngTbills" min="10" max="70" step="5" value="40" class="sim-range" oninput="recalculatePortfolio()">
+                    <span style="font-size: 0.7rem; color: var(--text-dim);">عوائد دورية مضمونة بنكياً بدون مخاطر.</span>
+                </div>
+
+                <div class="sim-input-card">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700;">
+                        <span>سبائك الذهب الفعلي (38.6%)</span>
+                        <span id="lblGold" style="color: var(--fin-amber); font-family: 'JetBrains Mono'; font-weight: 900;">25%</span>
+                    </div>
+                    <input type="range" id="rngGold" min="10" max="50" step="5" value="25" class="sim-range" oninput="recalculatePortfolio()">
+                    <span style="font-size: 0.7rem; color: var(--text-dim);">درع الحماية الأول ضد التضخم وتقلبات العملة.</span>
+                </div>
+
+                <div class="sim-input-card">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700;">
+                        <span>أسهم البورصة EGX30 (29.4%)</span>
+                        <span id="lblEquity" style="color: var(--fin-cyan); font-family: 'JetBrains Mono'; font-weight: 900;">20%</span>
+                    </div>
+                    <input type="range" id="rngEquity" min="5" max="40" step="5" value="20" class="sim-range" oninput="recalculatePortfolio()">
+                    <span style="font-size: 0.7rem; color: var(--text-dim);">المتبقي للعقارات المدرة (<span id="lblRealEstateRemaining">15%</span>).</span>
+                </div>
+            </div>
+
+            <div class="sim-metrics-banner">
+                <div>
+                    <span style="font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase;">العائد السنوي الموزون</span>
+                    <p id="resYield" style="font-size: 2.1rem; font-weight: 900; color: var(--fin-gold); font-family: 'JetBrains Mono';">+25.80%</p>
+                </div>
+                <div style="width: 1px; height: 50px; background: rgba(255,255,255,0.1);"></div>
+                <div>
+                    <span style="font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase;">الأرباح السنوية الصافية</span>
+                    <p id="resAnnual" style="font-size: 2.1rem; font-weight: 900; color: #10B981; font-family: 'JetBrains Mono';">47.83 M EGP</p>
+                </div>
+                <div style="width: 1px; height: 50px; background: rgba(255,255,255,0.1);"></div>
+                <div>
+                    <span style="font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase;">التدفق النقدي المتولد شهرياً</span>
+                    <p id="resMonthly" style="font-size: 2.1rem; font-weight: 900; color: var(--fin-cyan); font-family: 'JetBrains Mono';">3,986 ألف ج.م / شهر</p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Synthesized Web Audio Haptics
+        let audioCtx = null;
+        let soundEnabled = true;
+
+        function initAudio() {
+            if (!audioCtx) {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (AudioCtx) audioCtx = new AudioCtx();
+            }
+            if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+        }
+
+        function playChime(freq = 880, duration = 0.08) {
+            if (!soundEnabled) return;
+            try {
+                initAudio();
+                if (!audioCtx) return;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(freq * 1.35, audioCtx.currentTime + duration * 0.4);
+                osc.frequency.exponentialRampToValueAtTime(freq * 0.9, audioCtx.currentTime + duration);
+
+                gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch(e) {}
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const icon = document.getElementById('audioIcon');
+            const lbl = document.getElementById('audioLabel');
+            if (soundEnabled) {
+                icon.innerText = '🔊';
+                lbl.innerText = 'Glass Sonic: ON';
+                playChime(1046);
+            } else {
+                icon.innerText = '🔇';
+                lbl.innerText = 'Glass Sonic: MUTED';
+            }
+        }
+
+        // Ambient 3D Cyber Particles Canvas
+        let particleVelMult = 1;
+        function initHoloParticles() {
+            const canvas = document.getElementById('holoCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let w, h;
+            function resize() {
+                w = canvas.width = window.innerWidth;
+                h = canvas.height = window.innerHeight;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            const count = Math.min(36, Math.floor(window.innerWidth / 32));
+            const particles = [];
+            for (let i = 0; i < count; i++) {
+                particles.push({
+                    x: Math.random() * w,
+                    y: Math.random() * h,
+                    vx: (Math.random() - 0.5) * 0.45,
+                    vy: (Math.random() - 0.5) * 0.45,
+                    r: Math.random() * 2 + 0.6,
+                    color: Math.random() > 0.5 ? '#FFD700' : (Math.random() > 0.5 ? '#10B981' : '#00F0FF'),
+                    alpha: Math.random() * 0.5 + 0.2
+                });
+            }
+
+            function loop() {
+                ctx.clearRect(0, 0, w, h);
+                particleVelMult += (1 - particleVelMult) * 0.04;
+
+                // Connections
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < 115) {
+                            ctx.beginPath();
+                            ctx.strokeStyle = `rgba(255, 215, 0, ${0.12 * (1 - dist / 115)})`;
+                            ctx.lineWidth = 0.6;
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                // Draw Dots
+                for (let p of particles) {
+                    p.x += p.vx * particleVelMult;
+                    p.y += p.vy * particleVelMult;
+                    if (p.x < 0) p.x = w;
+                    if (p.x > w) p.x = 0;
+                    if (p.y < 0) p.y = h;
+                    if (p.y > h) p.y = 0;
+
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    ctx.fillStyle = p.color;
+                    ctx.globalAlpha = p.alpha;
+                    ctx.shadowBlur = 8;
+                    ctx.shadowColor = p.color;
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                    ctx.globalAlpha = 1.0;
+                }
+                requestAnimationFrame(loop);
+            }
+            requestAnimationFrame(loop);
+        }
+
+        // Scroll Tracking & Laser Progress
+        let lastScrollY = window.scrollY;
+        function handleScroll() {
+            const curY = window.scrollY;
+            const delta = Math.abs(curY - lastScrollY);
+            lastScrollY = curY;
+
+            // Energize background particles
+            particleVelMult = Math.min(4.5, 1 + delta * 0.08);
+
+            // Update Laser Bar
+            const totalH = document.documentElement.scrollHeight - window.innerHeight;
+            const pct = totalH > 0 ? Math.round((curY / totalH) * 100) : 0;
+            const laser = document.getElementById('laserProgress');
+            if (laser) laser.style.width = pct + '%';
+
+            // Update Depth Text
+            const depthText = document.getElementById('hudDepthText');
+            if (depthText) {
+                if (pct < 20) depthText.innerText = `عمق التصفح: ${pct}% • نظرة المحفظة السيادية`;
+                else if (pct < 55) depthText.innerText = `عمق التصفح: ${pct}% • الرسوم البيانية ومنحنيات النمو`;
+                else depthText.innerText = `عمق التصفح: ${pct}% • محاكي إعادة توزيع الأصول`;
+            }
+        }
+
+        // Interactive 3D Parallax Tilt
+        function initTilt() {
+            document.querySelectorAll('.interactive-tilt').forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const cx = rect.width / 2;
+                    const cy = rect.height / 2;
+                    const rotX = ((y - cy) / cy) * -5.5;
+                    const rotY = ((x - cx) / cx) * 5.5;
+                    card.style.transform = `perspective(1000px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) translateY(-2px)`;
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)';
+                });
+            });
+        }
+
+        // Number CountUp Telemetry
+        function countUp(el, target, suffix = '', decimals = 1, duration = 1000) {
+            const start = performance.now();
+            function tick(now) {
+                const elapsed = now - start;
+                const progress = Math.min(elapsed / duration, 1);
+                const ease = 1 - Math.pow(1 - progress, 3);
+                const current = (target * ease).toFixed(decimals);
+                el.innerHTML = `${Number(current).toLocaleString()} ${suffix}`;
+                if (progress < 1) requestAnimationFrame(tick);
+                else el.innerHTML = `${target.toFixed(decimals)} ${suffix}`;
+            }
+            requestAnimationFrame(tick);
+        }
+
+        // IntersectionObserver for Staggered Scroll Reveals
+        function initObserver() {
+            const obs = new IntersectionObserver((entries) => {
+                entries.forEach((entry, idx) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-revealed');
+                        const pitchList = [784, 880, 988, 1046, 1175];
+                        playChime(pitchList[idx % pitchList.length]);
+                        obs.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.12 });
+
+            document.querySelectorAll('.scroll-reveal').forEach(el => obs.observe(el));
+        }
+
+        // Render Plotly Visualizations
+        function renderPlots() {
+            // 1. Capital Growth Spline
+            Plotly.newPlot('plotGrowth', [
+                {
+                    x: ['2026', '2027', '2028', '2029', '2030'],
+                    y: [75.0, 95.4, 121.4, 154.5, 196.6],
+                    name: 'أذون الخزانة المصرية (27.25%)',
+                    line: { color: '#FFD700', width: 3.5, shape: 'spline' },
+                    mode: 'lines+markers',
+                    marker: { size: 8, color: '#FFD700' }
+                },
+                {
+                    x: ['2026', '2027', '2028', '2029', '2030'],
+                    y: [42.5, 58.9, 81.6, 113.1, 156.8],
+                    name: 'سبائك الذهب الفعلي (38.6%)',
+                    line: { color: '#F59E0B', width: 3.5, dash: 'dot', shape: 'spline' },
+                    mode: 'lines+markers',
+                    marker: { size: 8, color: '#F59E0B' }
+                },
+                {
+                    x: ['2026', '2027', '2028', '2029', '2030'],
+                    y: [38.2, 49.4, 63.9, 82.7, 107.0],
+                    name: 'أسهم البورصة EGX30 (29.4%)',
+                    line: { color: '#00F0FF', width: 3.5, shape: 'spline' },
+                    mode: 'lines+markers',
+                    marker: { size: 8, color: '#00F0FF' }
+                }
+            ], {
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                font: { color: '#F8FAFC', family: 'Cairo' },
+                margin: { l: 30, r: 20, t: 30, b: 35 },
+                legend: { orientation: 'h', y: 1.15, x: 0.5, xanchor: 'center' },
+                xaxis: { showgrid: false },
+                yaxis: { showgrid: true, gridcolor: 'rgba(255,255,255,0.06)' }
+            }, { responsive: true, displayModeBar: false });
+
+            // 2. Asset Allocation 3D Donut
+            Plotly.newPlot('plotDonut', [{
+                values: [75.0, 42.5, 38.2, 29.7],
+                labels: ['أذون خزانة حكومية', 'سبائك ذهب عيار 24', 'أسهم قيادية EGX30', 'أصول عقارية وصكوك'],
+                type: 'pie',
+                hole: 0.62,
+                marker: { 
+                    colors: ['#FFD700', '#F59E0B', '#00F0FF', '#10B981'],
+                    line: { color: '#030712', width: 2.5 }
+                },
+                textinfo: 'percent+label',
+                hoverinfo: 'label+value+percent'
+            }], {
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                font: { color: '#F8FAFC', family: 'Cairo' },
+                showlegend: false,
+                margin: { l: 15, r: 15, t: 15, b: 15 }
+            }, { responsive: true, displayModeBar: false });
+
+            // 3. T-Bills Yield Ladder
+            Plotly.newPlot('plotYieldLadder', [{
+                x: ['3 شهور (91 يوم)', '6 شهور (182 يوم)', '9 شهور (273 يوم)', 'سنة كاملة (364 يوم)'],
+                y: [28.50, 27.90, 27.45, 27.25],
+                type: 'bar',
+                marker: {
+                    color: ['#00F0FF', '#10B981', '#A855F7', '#FFD700'],
+                    line: { color: '#FFFFFF', width: 1 }
+                },
+                text: ['28.50%', '27.90%', '27.45%', '27.25%'],
+                textposition: 'outside'
+            }], {
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                font: { color: '#F8FAFC', family: 'Cairo' },
+                margin: { l: 30, r: 20, t: 30, b: 40 },
+                xaxis: { showgrid: false },
+                yaxis: { showgrid: true, gridcolor: 'rgba(255,255,255,0.06)', range: [20, 31] }
+            }, { responsive: true, displayModeBar: false });
+
+            // 4. Risk vs Return Scatter
+            Plotly.newPlot('plotRiskMatrix', [{
+                x: [2.5, 8.5, 18.2, 11.0],
+                y: [27.25, 38.60, 29.40, 14.80],
+                mode: 'markers+text',
+                text: ['أذون الخزانة', 'سبائك الذهب', 'البورصة EGX30', 'العقارات المدرة'],
+                textposition: 'top center',
+                marker: {
+                    size: [28, 36, 32, 26],
+                    color: ['#FFD700', '#F59E0B', '#00F0FF', '#10B981'],
+                    line: { color: '#FFFFFF', width: 2 }
+                }
+            }], {
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                font: { color: '#F8FAFC', family: 'Cairo' },
+                margin: { l: 35, r: 20, t: 30, b: 35 },
+                xaxis: { title: 'مؤشر التذبذب والمخاطرة (%)', showgrid: true, gridcolor: 'rgba(255,255,255,0.06)' },
+                yaxis: { title: 'العائد السنوي الصافي (%)', showgrid: true, gridcolor: 'rgba(255,255,255,0.06)' }
+            }, { responsive: true, displayModeBar: false });
+        }
+
+        // Rebalancing Simulator Calculation
+        function recalculatePortfolio() {
+            const tbills = parseInt(document.getElementById('rngTbills').value);
+            const gold = parseInt(document.getElementById('rngGold').value);
+            const equity = parseInt(document.getElementById('rngEquity').value);
+            const re = Math.max(0, 100 - tbills - gold - equity);
+
+            document.getElementById('lblTbills').innerText = tbills + '%';
+            document.getElementById('lblGold').innerText = gold + '%';
+            document.getElementById('lblEquity').innerText = equity + '%';
+            document.getElementById('lblRealEstateRemaining').innerText = re + '%';
+
+            const totalAUM = 185.40;
+            const weightedYield = ((tbills * 27.25) + (gold * 38.60) + (equity * 29.40) + (re * 14.80)) / 100;
+            const annualProfit = totalAUM * (weightedYield / 100);
+            const monthlyCashflow = (annualProfit / 12) * 1000;
+
+            document.getElementById('resYield').innerText = '+' + weightedYield.toFixed(2) + '%';
+            document.getElementById('resAnnual').innerText = annualProfit.toFixed(2) + ' M EGP';
+            document.getElementById('resMonthly').innerText = Math.round(monthlyCashflow).toLocaleString() + ' ألف ج.م / شهر';
+        }
+
+        function handleSimulateClick() {
+            playChime(1175, 0.12);
+            confetti({
+                particleCount: 70,
+                spread: 75,
+                origin: { y: 0.75 },
+                colors: ['#FFD700', '#F59E0B', '#10B981', '#00F0FF']
+            });
+        }
+
+        // Initialization
+        window.addEventListener('DOMContentLoaded', () => {
+            initHoloParticles();
+            initTilt();
+            initObserver();
+            window.addEventListener('scroll', handleScroll, { passive: true });
+            document.body.addEventListener('click', initAudio, { once: true });
+            renderPlots();
+            recalculatePortfolio();
+        });
+    </script>
+</body>
+</html>
