@@ -73,10 +73,11 @@ with chart_col1:
         plot_bgcolor='rgba(0,0,0,0)',
         font=dict(color='#F8FAFC', family='Cairo'),
         showlegend=False,
+        dragmode=False,
         height=320,
         margin=dict(l=10, r=10, t=40, b=10)
     )
-    st.plotly_chart(fig_donut, use_container_width=True)
+    st.plotly_chart(fig_donut, config={'scrollZoom': False, 'displayModeBar': False, 'doubleClick': False}, use_container_width=True)
 
 with chart_col2:
     # 5-Year Cumulative Yield Forecast
@@ -100,12 +101,13 @@ with chart_col2:
         paper_bgcolor='rgba(0,0,0,0)',
         plot_bgcolor='rgba(0,0,0,0)',
         font=dict(color='#F8FAFC', family='Cairo'),
+        dragmode=False,
         height=320,
         margin=dict(l=20, r=20, t=40, b=20),
-        xaxis=dict(showgrid=False),
-        yaxis=dict(showgrid=True, gridcolor='rgba(255,255,255,0.06)')
+        xaxis=dict(showgrid=False, fixedrange=True),
+        yaxis=dict(showgrid=True, gridcolor='rgba(255,255,255,0.06)', fixedrange=True)
     )
-    st.plotly_chart(fig_grow, use_container_width=True)
+    st.plotly_chart(fig_grow, config={'scrollZoom': False, 'displayModeBar': False, 'doubleClick': False}, use_container_width=True)
 
 # Interactive Rebalancing Simulator
 st.markdown("---")

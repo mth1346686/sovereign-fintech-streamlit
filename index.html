@@ -404,6 +404,19 @@
             .charts-row-2 { grid-template-columns: 1fr; }
             .kpi-number { font-size: 1.8rem; }
         }
+
+        /* 100% Locked Non-Zoomable Charts & Native Mobile Touch Scroll */
+        .js-plotly-plot, .plot-container {
+            touch-action: pan-y !important;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .js-plotly-plot .draglayer {
+            pointer-events: none !important;
+        }
+        .modebar {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
@@ -823,8 +836,18 @@
             document.querySelectorAll('.scroll-reveal').forEach(el => obs.observe(el));
         }
 
-        // Render Plotly Visualizations
+        // Render Plotly Visualizations (100% Locked - Zero Zooming / Scaling)
         function renderPlots() {
+            const chartConfig = {
+                responsive: true,
+                displayModeBar: false,
+                scrollZoom: false,
+                doubleClick: false,
+                showAxisDragHandles: false,
+                showAxisRangeEntryBoxes: false,
+                staticPlot: false
+            };
+
             // 1. Capital Growth Spline
             Plotly.newPlot('plotGrowth', [
                 {
@@ -857,9 +880,10 @@
                 font: { color: '#F8FAFC', family: 'Cairo' },
                 margin: { l: 30, r: 20, t: 30, b: 35 },
                 legend: { orientation: 'h', y: 1.15, x: 0.5, xanchor: 'center' },
-                xaxis: { showgrid: false },
-                yaxis: { showgrid: true, gridcolor: 'rgba(255,255,255,0.06)' }
-            }, { responsive: true, displayModeBar: false });
+                dragmode: false,
+                xaxis: { showgrid: false, fixedrange: true },
+                yaxis: { showgrid: true, gridcolor: 'rgba(255,255,255,0.06)', fixedrange: true }
+            }, chartConfig);
 
             // 2. Asset Allocation 3D Donut
             Plotly.newPlot('plotDonut', [{
@@ -878,8 +902,9 @@
                 plot_bgcolor: 'rgba(0,0,0,0)',
                 font: { color: '#F8FAFC', family: 'Cairo' },
                 showlegend: false,
+                dragmode: false,
                 margin: { l: 15, r: 15, t: 15, b: 15 }
-            }, { responsive: true, displayModeBar: false });
+            }, chartConfig);
 
             // 3. T-Bills Yield Ladder
             Plotly.newPlot('plotYieldLadder', [{
@@ -897,9 +922,10 @@
                 plot_bgcolor: 'rgba(0,0,0,0)',
                 font: { color: '#F8FAFC', family: 'Cairo' },
                 margin: { l: 30, r: 20, t: 30, b: 40 },
-                xaxis: { showgrid: false },
-                yaxis: { showgrid: true, gridcolor: 'rgba(255,255,255,0.06)', range: [20, 31] }
-            }, { responsive: true, displayModeBar: false });
+                dragmode: false,
+                xaxis: { showgrid: false, fixedrange: true },
+                yaxis: { showgrid: true, gridcolor: 'rgba(255,255,255,0.06)', range: [20, 31], fixedrange: true }
+            }, chartConfig);
 
             // 4. Risk vs Return Scatter
             Plotly.newPlot('plotRiskMatrix', [{
@@ -918,9 +944,10 @@
                 plot_bgcolor: 'rgba(0,0,0,0)',
                 font: { color: '#F8FAFC', family: 'Cairo' },
                 margin: { l: 35, r: 20, t: 30, b: 35 },
-                xaxis: { title: 'مؤشر التذبذب والمخاطرة (%)', showgrid: true, gridcolor: 'rgba(255,255,255,0.06)' },
-                yaxis: { title: 'العائد السنوي الصافي (%)', showgrid: true, gridcolor: 'rgba(255,255,255,0.06)' }
-            }, { responsive: true, displayModeBar: false });
+                dragmode: false,
+                xaxis: { title: 'مؤشر التذبذب والمخاطرة (%)', showgrid: true, gridcolor: 'rgba(255,255,255,0.06)', fixedrange: true },
+                yaxis: { title: 'العائد السنوي الصافي (%)', showgrid: true, gridcolor: 'rgba(255,255,255,0.06)', fixedrange: true }
+            }, chartConfig);
         }
 
         // Rebalancing Simulator Calculation

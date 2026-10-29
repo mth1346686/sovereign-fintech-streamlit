@@ -179,7 +179,9 @@ HTML_PAGE = """<!DOCTYPE html>
     </main>
 
     <script>
-        // Render Plotly Charts
+        // Render Plotly Charts (100% Fixed - No Zoom/Pan)
+        const chartConfig = { responsive: true, displayModeBar: false, scrollZoom: false, doubleClick: false, showAxisDragHandles: false, staticPlot: false };
+
         Plotly.newPlot('chartDonut', [{
             values: [75.0, 42.5, 38.2, 29.7],
             labels: ['أذون الخزانة المصرية', 'سبائك الذهب الفعلي', 'أسهم EGX30', 'أصول عقارية مدرة'],
@@ -192,9 +194,10 @@ HTML_PAGE = """<!DOCTYPE html>
             plot_bgcolor: 'rgba(0,0,0,0)',
             font: { color: '#F8FAFC', family: 'Cairo' },
             showlegend: false,
+            dragmode: false,
             height: 280,
             margin: { l: 10, r: 10, t: 10, b: 10 }
-        });
+        }, chartConfig);
 
         Plotly.newPlot('chartGrowth', [
             {
@@ -217,9 +220,10 @@ HTML_PAGE = """<!DOCTYPE html>
             font: { color: '#F8FAFC', family: 'Cairo' },
             height: 280,
             margin: { l: 30, r: 20, t: 20, b: 30 },
-            xaxis: { showgrid: false },
-            yaxis: { showgrid: true, gridcolor: 'rgba(255,255,255,0.06)' }
-        });
+            dragmode: false,
+            xaxis: { showgrid: false, fixedrange: true },
+            yaxis: { showgrid: true, gridcolor: 'rgba(255,255,255,0.06)', fixedrange: true }
+        }, chartConfig);
 
         function runSim() {
             const tbills = parseInt(document.getElementById('rngTbills').value);
